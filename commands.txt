@@ -1,5 +1,17 @@
+// Iniciar sesion en heroku
+heroku login
+
+// Clonar el repo
+heroku git:clone -a space3d
+
 // Guardar y mandar a la web
-git add . && git commit -m "Add root route" && git push origin master && git push heroku master
+git add . 
+
+// Confirmar cambios
+git commit -am "Changes"
+
+// Subir a github y desplegar
+git push heroku master
 
 // Ver servidor
 heroku logs --tail
