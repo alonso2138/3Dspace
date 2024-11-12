@@ -33,8 +33,24 @@ export default class ModelLoader {
 
             model.traverse((node) => {
                 if (node.isMesh) {
-                    node.castShadow = true;
-                    node.receiveShadow = true;
+                    if (node.geometry) {
+                        node.geometry.dispose();
+                    }
+    
+                    if (node.material) {
+                        if (Array.isArray(node.material)) {
+                            // Dispose of each material if it's an array
+                            node.material.forEach(material => material.dispose());
+                        } else {
+                            // Dispose of the material if it's a single material
+                            node.material.dispose();
+                        }
+                    }
+    
+                    // Dispose of the object's textures if any
+                    if (node.material && node.material.map) {
+                        node.material.map.dispose();
+                    }
                 }
             });
 

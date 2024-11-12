@@ -1,15 +1,9 @@
 {
     "marcas": [
         {
-            "name": "Triumph",
-            "photo_url": "/images/logos/triumph_logo.png",
-            "models": [
-                {
-                    "name": "Triumph Speed Triple SE 2013",
-                    "photo_url": "/images/models/Triumph_Speed_Triple_Se_2013.png",
-                    "data_url": "/datos/Triumph_Speed_Triple_Se_2013.json"
-                }
-            ]
+            "name": "Piso en Avd. de los Naranjos 16",
+            "photo_url": "/images/casas/1.jpg",
+            "data_url": "/datos/Triumph_Speed_Triple_Se_2013.json"
         }
     ]
 }

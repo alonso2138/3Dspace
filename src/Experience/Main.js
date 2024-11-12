@@ -156,91 +156,6 @@ export default class Experience {
         this.startNormal();
     }
 
-    // Callback function for parent square click
-    onParentSquareClick(id) {
-        //Check if there are already customs shown
-        if( this.piezaEditando==undefined){            
-            this.piezaEditando=id;
-            setTimeout(() => {
-                this.bottomBar.generateBottomBar(this.moto.customs,id);
-                document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
-            }, this.bottomBar.animationTimeout);
-        
-            //Check if we want to hide customs or to change customs
-        }else {
-            if( this.piezaEditando==id){
-                this.piezaEditando=undefined;
-
-                this.bottomBar.deleteBottomBar();
-                if(this.infoTab) this.infoTab.disappearBox();
-                this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
-
-                document.getElementById('ParentSquare'+id).classList.remove('ParentSquareSelected');
-        
-            }else{
-                document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
-                    this.piezaEditando=id;
-                this.bottomBar.deleteBottomBar();
-                if(this.infoTab) this.infoTab.disappearBox();
-                this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
-
-                setTimeout(() => {
-                    this.bottomBar.generateBottomBar(this.moto.customs,id);
-                    document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
-
-                }, this.bottomBar.animationTimeout);
-            }
-        }
-
-
-
-    }
-
-    // Callback function for square click
-    onSquareClick(id) {
-        //Antes de esta función se ejecuta infoTabAppear(id)
-
-        //Estilos de seleccionar cuadrado
-        // Quitar estilos a todos los squares (id pieza seleccionada, i pieza iterada)
-        const piezaEditando = this.piezaEditando;
-        function cuadrado(x){
-            return document.getElementById('CustomSquare'+(x+1)+'Pieza'+piezaEditando);
-        }
-        if(cuadrado(id) && piezaEditando!=undefined){
-            for(let i = 0; i < this.moto.customs[piezaEditando].id.length; i++){
-                if(cuadrado(i).classList.contains('CustomSquareSelected')) cuadrado(i).classList.remove('CustomSquareSelected');      
-            }
-
-            document.getElementById('CustomSquare'+(id+1)+'Pieza'+piezaEditando).classList.add('CustomSquareSelected');
-            
-            this.modelLoader.idAnterior[piezaEditando] = id;
-            //this.experience.moto.customs[piezaEditando].selected=id;
-            //console.log("El custom seleccionado es: "+this.experience.moto.customs[piezaEditando].selected,piezaEditando)
-        }
-
-        //Ahora se llama el model loader
-        this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
-
-        // Custom clickado es el seleccionado
-        if(id==this.moto.customs[this.piezaEditando].selected){
-            
-        }else{
-            // Confirmar y añadir al carrito => Se ejecuta addToCart en right bar
-            // Click fuera => disappearBox()
-            // Click otro custom
-        }
-
-        if(this.rightBar) this.rightBar.updateList( this.piezaEditando, this.moto.customs[ this.piezaEditando].title[id], this.moto.customs[ this.piezaEditando].price[id]);
-    }
-
-    infoTabAppear(id){
-        if(this.infoTab) this.infoTab.appearBox(this.moto.customs[this.piezaEditando],id);
-    }
-
-    onSquareUnHover(){
-
-    }
-
     initScene() {
         // Initialize scene setup
         this.sceneSetup = new SceneSetup(this.canvas);
@@ -254,7 +169,7 @@ export default class Experience {
 
         // this.Controls for rotating the scene
         this.controls = new OrbitControls(this.sceneSetup.camera, this.sceneSetup.canvas);
-        this.controls.enablePan = false; // Disable panning
+        this.controls.enablePan = true; // Disable panning
         this.controls.target.set(0, 0.5, 0);
         this.controls.minDistance = 1.5;
         this.controls.maxDistance = 4;
@@ -275,8 +190,6 @@ export default class Experience {
                 //console.log(this.moto.customs[savedConfig.selectedPieces[i].piezaEditando].selected,savedConfig.selectedPieces[i])
                 this.moto.customs[savedConfig.selectedPieces[i].piezaEditando].selected = savedConfig.selectedPieces[i].id
             }
-
-            this.rightBar.updateList();
             
 
             //document.cookie = `motoConfig=; path=/; max-age=0`;
@@ -286,11 +199,6 @@ export default class Experience {
             // Create a new cookie with the initial configuration
             this.updateCookie();
         }
-
-        this.infoTab = new InfoTab();
-
-        this.bottomBar = new BottomBar('square-container', this.onSquareClick.bind(this), this.onParentSquareClick.bind(this), this.infoTabAppear.bind(this), this.onSquareUnHover.bind(this));
-        this.bottomBar.init();
 
         // Load main Object
         this.modelLoader.loadModel(this.moto, undefined, 0);
@@ -315,7 +223,7 @@ export default class Experience {
 
     resizeEvent(){
         if (this.sceneSetup) this.sceneSetup.resize();
-        if (this.bottomBar) this.bottomBar.resize();
+
     }
 
     update()

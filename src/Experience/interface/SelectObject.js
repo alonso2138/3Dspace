@@ -143,7 +143,7 @@ export default class SelectObject extends EventEmitter {
 
         const title = document.createElement('h1');
         title.className = 'title';
-        title.textContent = 'Selecciona la marca:';
+        title.textContent = 'Selecciona la casa:';
         container.appendChild(title);
 
         const brandContainer = document.createElement('div');
@@ -152,7 +152,8 @@ export default class SelectObject extends EventEmitter {
         this.brands.forEach(brand => {
             const brandCard = document.createElement('div');
             brandCard.className = 'brand-card';
-            brandCard.addEventListener('click', () => this.showModels(brand));
+            //brandCard.addEventListener('click', () => this.showModels(brand));
+            brandCard.addEventListener('click', () => this.selectModel(brand.data_url));
 
             const img = document.createElement('img');
             img.src = brand.photo_url;
@@ -168,60 +169,6 @@ export default class SelectObject extends EventEmitter {
 
         container.appendChild(brandContainer);
         document.body.appendChild(container);
-    }
-
-    showModels(brand) {
-        // Apply blur effect
-        document.body.classList.add('blurred');
-
-        // Clear the current content after the blur animation
-        setTimeout(() => {
-            // Clear the current content
-            document.body.innerHTML = '';
-
-            const container = document.createElement('div');
-            container.className = 'container';
-
-            const backButton = document.createElement('a');
-            backButton.className = 'back-button';
-            backButton.innerHTML = '←';
-            backButton.addEventListener('click', () => {
-                document.body.innerHTML = '';
-                this.generateBrandHTML();
-            });
-            container.appendChild(backButton);
-
-            const title = document.createElement('h1');
-            title.className = 'title';
-            title.textContent = 'Selecciona tu moto:';
-            container.appendChild(title);
-
-            const modelContainer = document.createElement('div');
-            modelContainer.className = 'model-container';
-
-            brand.models.forEach(model => {
-                const modelCard = document.createElement('div');
-                modelCard.className = 'model-card';
-                modelCard.addEventListener('click', () => this.selectModel(model.data_url));
-
-                const img = document.createElement('img');
-                img.src = model.photo_url;
-                img.alt = model.name;
-
-                const modelTitle = document.createElement('h3');
-                modelTitle.textContent = model.name;
-
-                modelCard.appendChild(img);
-                modelCard.appendChild(modelTitle);
-                modelContainer.appendChild(modelCard);
-            });
-
-            container.appendChild(modelContainer);
-            document.body.appendChild(container);
-
-            // Remove blur effect after content is updated
-            document.body.classList.remove('blurred');
-        }, 500); // Match the transition duration
     }
 
     selectModel(path) {
@@ -256,6 +203,7 @@ export default class SelectObject extends EventEmitter {
         this.injectStyles();
         const data = await this.fetchJSONData();
         this.extractBrands(data);
+
         this.generateBrandHTML();
     }
 }
