@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "start": "node server.js",
     "heroku-postbuild": "vite build"
   },
   "devDependencies": {
@@ -17,6 +18,8 @@
     "lil-gui": "^0.19.2",
     "mysql": "^2.18.1",
     "pg": "^8.13.0",
-    "three": "^0.166.1"
+    "three": "^0.166.1",
+    "vite-plugin-commonjs": "^0.10.3",
+    "vite-plugin-node": "^4.0.0"
   }
 }
