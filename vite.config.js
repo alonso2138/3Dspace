@@ -1,4 +1,3 @@
-import commonjs from 'vite-plugin-commonjs'
 import restart from 'vite-plugin-restart'
 
 export default {
@@ -17,7 +16,6 @@ export default {
     },
     plugins:
     [
-        commonjs(), // Convert CommonJS modules to ES6
         restart({ restart: [ '../static/**', ] }) // Restart server on static file change
     ],
 }

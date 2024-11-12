@@ -11,7 +11,7 @@ git add .
 git commit -am "Changes"
 
 // Subir a github y desplegar
-git push heroku master
+git push 3Dspace master
 
 // Ver servidor
 heroku logs --tail
