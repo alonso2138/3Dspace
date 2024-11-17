@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Square Generator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Define CSS styles
+                const styles = `
+                    .custom-container {
+                        height: 300px; /* Set the height limit */
+                        width: 150px; /* Set a thinner width */
+                        overflow-y: auto; /* Enable vertical scrolling if content overflows */
+                        display: flex;
+                        flex-direction: column; /* Stack items vertically */
+                        align-items: center; /* Center the squares horizontally */
+                        margin-top: 20px;
+                        margin-left: 20px; /* Keep the container on the left side */
+                        border-radius: 10px; /* Slightly reduce the corner radius */
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a nice shadow */
+                        padding: 10px;
+                        background-color: #f9f9f9; /* Optional: Add a background color */
+                        gap: 20px; /* Increase margin between squares */
+                    }
+
+                    .custom-square-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 10px; /* Increase space between title and square */
+                    }
+
+                    .custom-square-title {
+                        font-size: 14px;
+                        text-align: center;
+                    }
+
+                    .custom-square {
+                        width: 60px; /* Make the squares larger */
+                        height: 60px; /* Make the squares larger */
+                        background-color: #3498db;
+                        border-radius: 10px; /* Slightly reduce the corner radius */
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a nice shadow */
+                        transition: transform 0.3s ease; /* Smooth hover animation */
+                    }
+
+                    .custom-square:hover {
+                        transform: scale(1.1); /* Scale up on hover */
+                    }
+
+                    /* Custom scrollbar styles */
+                    .custom-container::-webkit-scrollbar {
+                        width: 12px;
+                    }
+
+                    .custom-container::-webkit-scrollbar-track {
+                        background: #f9f9f9;
+                        border-radius: 15px;
+                    }
+
+                    .custom-container::-webkit-scrollbar-thumb {
+                        background-color: #3498db;
+                        border-radius: 15px;
+                        border: 3px solid #f9f9f9;
+                    }
+
+                    .custom-container::-webkit-scrollbar-button {
+                        display: none; /* Remove the arrows */
+                    }
+
+                    .custom-big-title {
+                        font-size: 24px;
+                        font-weight: bold;
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                `;
+
+                // Inject CSS styles into the document's <head>
+                const styleSheet = document.createElement('style');
+                styleSheet.type = 'text/css';
+                styleSheet.innerText = styles;
+                document.head.appendChild(styleSheet);
+
+                // Create HTML structure
+                const container = document.createElement('div');
+                container.classList.add('custom-container');
+
+                const bigTitle = document.createElement('div');
+                bigTitle.classList.add('custom-big-title');
+                bigTitle.textContent = 'Piezas seleccionadas';
+
+                const squareContainer = document.createElement('div');
+                squareContainer.id = 'square-container';
+
+                container.appendChild(bigTitle);
+                container.appendChild(squareContainer);
+                document.body.appendChild(container);
+
+                // Generate squares
+                const numberOfSquares = 10; // Change this number to generate more or fewer squares
+
+                for (let i = 0; i < numberOfSquares; i++) {
+                    const squareWrapper = document.createElement('div');
+                    squareWrapper.classList.add('custom-square-container');
+
+                    const title = document.createElement('div');
+                    title.classList.add('custom-square-title');
+                    title.textContent = `Title ${i + 1}`;
+
+                    const square = document.createElement('div');
+                    square.classList.add('custom-square');
+
+                    squareWrapper.appendChild(title);
+                    squareWrapper.appendChild(square);
+                    squareContainer.appendChild(squareWrapper);
+                }
+            });
+        </script>
+    </body>
+</html>

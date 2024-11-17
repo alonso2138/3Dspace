@@ -1,0 +1,20 @@
+{
+    "marcas": [
+        {
+            "name": "",
+            "photo_url": "/images/logos/sandoval-1.png",
+            "models": [
+                {
+                    "name": "Piso en venta en avd Santander 12",
+                    "photo_url": "/images/1.jpeg",
+                    "data_url": "/datos/1.json"
+                },
+                {
+                    "name": "Doctor Ferran 19",
+                    "photo_url": "/images/2.jpeg",
+                    "data_url": "/datos/2.json"
+                }
+            ]
+        }
+    ]
+}

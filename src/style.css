@@ -1,0 +1,28 @@
+/* styles.css */
+*
+{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    user-select: none; /* Standard syntax */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+body {
+    margin: 0; 
+}
+canvas { 
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+
+
+}
+
+.webgl{
+
+    z-index: 0;
+}
+

@@ -1,0 +1,29 @@
+{
+  "name": "Tunerr",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server.js",
+    "heroku-postbuild": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^5.3.3",
+    "vite-plugin-restart": "^0.4.1"
+  },
+  "dependencies": {
+    "@stripe/stripe-js": "^1.15.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "gsap": "^3.12.5",
+    "lil-gui": "^0.19.2",
+    "mongodb": "^6.9.0",
+    "mysql": "^2.18.1",
+    "pg": "^8.13.0",
+    "stripe": "^17.3.1",
+    "three": "^0.166.1",
+    "vite-plugin-commonjs": "^0.10.3",
+    "vite-plugin-node": "^4.0.0"
+  }
+}

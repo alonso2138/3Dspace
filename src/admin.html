@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--
+            JSON format for the motorcycle selector data:
+
+            {
+                "marcas": [
+                    {
+                        "name": "Triumph",                                                      // Name of the motorcycle brand 
+                        "photo_url": "/images/logos/triumph_logo.png",                          // Url of where the motorcycle brand logo is uploaded
+                        "models": [
+                            {
+                                "name": "Triumph Speed Triple SE 2013",                         // Name of the motorcycle
+                                "photo_url": "/images/models/Triumph_Speed_Triple_Se_2013.png", // Url of where the motorcycle image is uploaded
+                                "data_url": "/datos/Triumph_Speed_Triple_Se_2013.json"          // Url of where the motorcycle data is uploaded
+                            }
+                        ]
+                    },
+                    ...
+                ]
+            }
+
+            JSON format for the motorcycle data:
+
+            {
+                "id": [0],                                  // Always 0 
+                "tipo": "...",                              // Brand of motorcycle
+                "model": "...",                             // Name of the motorcycle model 
+                "url": "...",                               // Url of where the motorcycle model is uploaded
+                "position": [x ,y ,z],                      // Position of the motorcycle model
+                "scale": [x, y, z],                         // Scale of the motorcycle model
+                "customs": [
+                    {
+                        "name": "...",                                                                      // Name of custom type
+                        "img": "...",                                                                       // Url of where image of custom type is uploaded,
+                        "id": [1, ...],                                                                     // Increment by 1
+                        "title": ["...", "...",...],                                                        // Name of each custom piece added
+                        "url": ["models/escape1.glb", "models/escape1.glb", "models/escape2.glb"],          // Url of each custom piece added
+                        "position": [[0, 0, 0], [0, 0.5, -0.1], [0, 0.5, -0.1]],                            // Position of each custom piece added
+                        "scale": [[0, 0, 0], [1, 1, 1], [1, 1, 1]],                                         // Scale of each custom piece added
+                        "selected": 0,                                                                      // Index of the selected custom piece (piece that is shown on default, must be set when creating the class)
+                        "image": ["images/default.png", "images/0/arrow.png", "images/0/SCproject.png"],    // Url of each custom piece photo added
+                        "price": [0, 256.34, 464.10]        // Price of each custom piece added
+                    },
+                    {
+                                                            // Repeat for each custom type
+                    }
+                ]
+            }
+        -->
+
+        <div id="motorcycle-summary" style="display: none;">
+            <h2>Motorcycle Summary</h2>
+            <img id="motorcycle-image" src="" alt="Motorcycle Image">
+            <p id="motorcycle-name"></p>
+            <p id="motorcycle-brand"></p>
+            <p id="motorcycle-position"></p>
+            <p id="motorcycle-scale"></p>
+            <button id="continue-without-customs">Continue without Customs</button>
+            <button id="add-customs">Add Customs</button>
+        </div>
+
+        <div id="customs-form" style="display: none;">
+            <h2>Add Custom Types</h2>
+            <form id="custom-type-form">
+                <label for="custom-name">Custom Type Name:</label>
+                <input type="text" id="custom-name" name="custom-name"><br>
+
+                <button type="button" id="add-custom-type">Add Custom Type</button>
+            </form>
+
+            <div id="custom-pieces-form" style="display: none;">
+                <h2>Add Custom Pieces</h2>
+                <form id="custom-piece-form">
+                    <label for="custom-id">ID:</label>
+                    <input type="number" id="custom-id" name="custom-id" value="1" readonly><br>
+
+                    <label for="custom-title">Title:</label>
+                    <input type="text" id="custom-title" name="custom-title"><br>
+
+                    <label for="custom-url">Model URL:</label>
+                    <input type="text" id="custom-url" name="custom-url"><br>
+
+                    <label for="custom-image">Image URL:</label>
+                    <input type="text" id="custom-image" name="custom-image"><br>
+
+                    <label for="custom-position">Position:</label>
+                    <input type="number" id="custom-pos-x" name="custom-pos-x" placeholder="x" value="0">
+                    <input type="number" id="custom-pos-y" name="custom-pos-y" placeholder="y" value="0">
+                    <input type="number" id="custom-pos-z" name="custom-pos-z" placeholder="z" value="0"><br>
+
+                    <label for="custom-scale">Scale:</label>
+                    <input type="number" id="custom-scale-x" name="custom-scale-x" placeholder="x" value="1">
+                    <input type="number" id="custom-scale-y" name="custom-scale-y" placeholder="y" value="1">
+                    <input type="number" id="custom-scale-z" name="custom-scale-z" placeholder="z" value="1"><br>
+
+                    <button type="button" id="add-custom-piece">Add Custom Piece</button>
+                </form>
+            </div>
+
+            <div id="customs-summary" style="display: none;">
+                <h2>Customs Summary</h2>
+                <ul id="customs-list"></ul>
+                <label for="default-custom">Select Default Custom:</label>
+                <select id="default-custom" name="default-custom"></select><br>
+                <button type="button" id="save-customs">Save Customs</button>
+            </div>
+        </div>
+                
+        <script src="" async defer>
+            document.getElementById('add-motorcycle-btn').addEventListener('click', () => {
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('motorcycle-form').style.display = 'block';
+            loadBrands();
+        });
+
+        document.getElementById('submit-motorcycle-info').addEventListener('click', () => {
+            const motorcycle = {
+                tipo: document.getElementById('tipo').value,
+                url: document.getElementById('url').value,
+                model: document.getElementById('model').value,
+                position: [
+                    parseFloat(document.getElementById('pos-x').value),
+                    parseFloat(document.getElementById('pos-y').value),
+                    parseFloat(document.getElementById('pos-z').value)
+                ],
+                scale: [
+                    parseFloat(document.getElementById('scale-x').value),
+                    parseFloat(document.getElementById('scale-y').value),
+                    parseFloat(document.getElementById('scale-z').value)
+                ]
+            };
+
+            displayMotorcycleSummary(motorcycle);
+        });
+
+        document.getElementById('add-customs').addEventListener('click', () => {
+            document.getElementById('motorcycle-summary').style.display = 'none';
+            document.getElementById('customs-form').style.display = 'block';
+        });
+
+        let customTypes = [];
+        let currentCustomType = null;
+
+        document.getElementById('add-custom-type').addEventListener('click', () => {
+            const customTypeName = document.getElementById('custom-name').value;
+            if (!customTypeName) {
+                alert('Please enter a custom type name.');
+                return;
+            }
+
+            currentCustomType = {
+                name: customTypeName,
+                img: '',
+                id: [],
+                title: [],
+                url: [],
+                image: [],
+                position: [],
+                scale: [],
+                selected: 0
+            };
+
+            customTypes.push(currentCustomType);
+
+            document.getElementById('custom-type-form').style.display = 'none';
+            document.getElementById('custom-pieces-form').style.display = 'block';
+            document.getElementById('customs-summary').style.display = 'block';
+
+            updateCustomsSummary();
+        });
+
+        function updateCustomsSummary() {
+            const customsList = document.getElementById('customs-list');
+            customsList.innerHTML = '';
+
+            customTypes.forEach((customType, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = customType.name;
+                customsList.appendChild(listItem);
+
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = customType.name;
+                document.getElementById('default-custom').appendChild(option);
+            });
+        }
+
+        document.getElementById('add-custom-piece').addEventListener('click', () => {
+            if (!currentCustomType) {
+                alert('Please add a custom type first.');
+                return;
+            }
+
+            const customPiece = {
+                id: currentCustomType.id.length + 1,
+                title: document.getElementById('custom-title').value,
+                url: document.getElementById('custom-url').value,
+                image: document.getElementById('custom-image').value,
+                position: [
+                    parseFloat(document.getElementById('custom-pos-x').value),
+                    parseFloat(document.getElementById('custom-pos-y').value),
+                    parseFloat(document.getElementById('custom-pos-z').value)
+                ],
+                scale: [
+                    parseFloat(document.getElementById('custom-scale-x').value),
+                    parseFloat(document.getElementById('custom-scale-y').value),
+                    parseFloat(document.getElementById('custom-scale-z').value)
+                ]
+            };
+
+            currentCustomType.id.push(customPiece.id);
+            currentCustomType.title.push(customPiece.title);
+            currentCustomType.url.push(customPiece.url);
+            currentCustomType.image.push(customPiece.image);
+            currentCustomType.position.push(customPiece.position);
+            currentCustomType.scale.push(customPiece.scale);
+
+            document.getElementById('custom-piece-form').reset();
+            document.getElementById('custom-id').value = customPiece.id + 1;
+
+            updateCustomsSummary();
+        });
+
+        document.getElementById('save-customs').addEventListener('click', () => {
+            const selectedCustomIndex = document.getElementById('default-custom').value;
+            if (currentCustomType) {
+                currentCustomType.selected = parseInt(selectedCustomIndex);
+            }
+
+            saveMotorcycleData();
+        });
+
+        function loadBrands() {
+            fetch('/static/datos/marcas.json')
+                .then(response => response.json())
+                .then(data => {
+                    const tipoSelect = document.getElementById('tipo');
+                    data.marcas.forEach(marca => {
+                        const option = document.createElement('option');
+                        option.value = marca.name;
+                        option.textContent = marca.name;
+                        tipoSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function displayMotorcycleSummary(motorcycle) {
+            document.getElementById('motorcycle-form').style.display = 'none';
+            document.getElementById('motorcycle-summary').style.display = 'block';
+
+            document.getElementById('motorcycle-name').textContent = motorcycle.model;
+            document.getElementById('motorcycle-brand').textContent = motorcycle.tipo;
+            document.getElementById('motorcycle-position').textContent = `Position: ${motorcycle.position.join(', ')}`;
+            document.getElementById('motorcycle-scale').textContent = `Scale: ${motorcycle.scale.join(', ')}`;
+        }
+
+        function addCustomType(customType) {
+            let customTypes = [];
+            let currentCustomType = null;
+
+            document.getElementById('add-custom-type').addEventListener('click', () => {
+                const customTypeName = document.getElementById('custom-name').value;
+                if (!customTypeName) {
+                    alert('Please enter a custom type name.');
+                    return;
+                }
+
+                currentCustomType = {
+                    name: customTypeName,
+                    img: '',
+                    id: [],
+                    title: [],
+                    url: [],
+                    image: [],
+                    position: [],
+                    scale: [],
+                    selected: 0
+                };
+
+                customTypes.push(currentCustomType);
+
+                document.getElementById('custom-type-form').style.display = 'none';
+                document.getElementById('custom-pieces-form').style.display = 'block';
+                document.getElementById('customs-summary').style.display = 'block';
+
+                updateCustomsSummary();
+            });
+
+            function updateCustomsSummary() {
+                const customsList = document.getElementById('customs-list');
+                customsList.innerHTML = '';
+
+                customTypes.forEach((customType, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = customType.name;
+                    customsList.appendChild(listItem);
+
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = customType.name;
+                    document.getElementById('default-custom').appendChild(option);
+                });
+            }
+
+            document.getElementById('add-custom-piece').addEventListener('click', () => {
+                if (!currentCustomType) {
+                    alert('Please add a custom type first.');
+                    return;
+                }
+
+                const customPiece = {
+                    id: currentCustomType.id.length + 1,
+                    title: document.getElementById('custom-title').value,
+                    url: document.getElementById('custom-url').value,
+                    image: document.getElementById('custom-image').value,
+                    position: [
+                        parseFloat(document.getElementById('custom-pos-x').value),
+                        parseFloat(document.getElementById('custom-pos-y').value),
+                        parseFloat(document.getElementById('custom-pos-z').value)
+                    ],
+                    scale: [
+                        parseFloat(document.getElementById('custom-scale-x').value),
+                        parseFloat(document.getElementById('custom-scale-y').value),
+                        parseFloat(document.getElementById('custom-scale-z').value)
+                    ]
+                };
+
+                currentCustomType.id.push(customPiece.id);
+                currentCustomType.title.push(customPiece.title);
+                currentCustomType.url.push(customPiece.url);
+                currentCustomType.image.push(customPiece.image);
+                currentCustomType.position.push(customPiece.position);
+                currentCustomType.scale.push(customPiece.scale);
+
+                document.getElementById('custom-piece-form').reset();
+                document.getElementById('custom-id').value = customPiece.id + 1;
+
+                updateCustomsSummary();
+            });
+
+            document.getElementById('save-customs').addEventListener('click', () => {
+                const selectedCustomIndex = document.getElementById('default-custom').value;
+                if (currentCustomType) {
+                    currentCustomType.selected = parseInt(selectedCustomIndex);
+                }
+
+                saveMotorcycleData();
+            });
+
+        }
+
+        function addCustomPiece(customPiece) {
+            function addCustomPiece(customPiece) {
+            if (!currentCustomType) {
+                alert('Please add a custom type first.');
+                return;
+            }
+
+            currentCustomType.id.push(customPiece.id);
+            currentCustomType.title.push(customPiece.title);
+            currentCustomType.url.push(customPiece.url);
+            currentCustomType.image.push(customPiece.image);
+            currentCustomType.position.push(customPiece.position);
+            currentCustomType.scale.push(customPiece.scale);
+
+            document.getElementById('custom-piece-form').reset();
+            document.getElementById('custom-id').value = customPiece.id + 1;
+
+            updateCustomsSummary();
+        }
+
+        document.getElementById('add-custom-piece').addEventListener('click', () => {
+            const customPiece = {
+                id: currentCustomType.id.length + 1,
+                title: document.getElementById('custom-title').value,
+                url: document.getElementById('custom-url').value,
+                image: document.getElementById('custom-image').value,
+                position: [
+                    parseFloat(document.getElementById('custom-pos-x').value),
+                    parseFloat(document.getElementById('custom-pos-y').value),
+                    parseFloat(document.getElementById('custom-pos-z').value)
+                ],
+                scale: [
+                    parseFloat(document.getElementById('custom-scale-x').value),
+                    parseFloat(document.getElementById('custom-scale-y').value),
+                    parseFloat(document.getElementById('custom-scale-z').value)
+                ]
+            };
+
+            addCustomPiece(customPiece);
+        });
+        }
+
+        function saveMotorcycleData() {
+            const motorcycle = {
+                id: [0],
+                tipo: document.getElementById('tipo').value,
+                model: document.getElementById('model').value,
+                url: document.getElementById('url').value,
+                position: [
+                    parseFloat(document.getElementById('pos-x').value),
+                    parseFloat(document.getElementById('pos-y').value),
+                    parseFloat(document.getElementById('pos-z').value)
+                ],
+                scale: [
+                    parseFloat(document.getElementById('scale-x').value),
+                    parseFloat(document.getElementById('scale-y').value),
+                    parseFloat(document.getElementById('scale-z').value)
+                ],
+                customs: customTypes
+            };
+
+            const motorcycleFileName = motorcycle.model.replace(/\s+/g, '_').toLowerCase() + '.json';
+            const motorcycleFilePath = `/datos/${motorcycleFileName}`;
+
+            // Save the motorcycle JSON data to a file
+            fetch(motorcycleFilePath, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(motorcycle)
+            })
+            .then(response => {
+                if (response.ok) {
+                    updateMarcasJson(motorcycle, motorcycleFilePath);
+                } else {
+                    alert('Failed to save motorcycle data.');
+                }
+            });
+        }
+
+        function updateMarcasJson(motorcycle, motorcycleFilePath) {
+            fetch('/static/datos/marcas.json')
+                .then(response => response.json())
+                .then(data => {
+                    const brandIndex = data.marcas.findIndex(brand => brand.name === motorcycle.tipo);
+                    const newModel = {
+                        name: motorcycle.model,
+                        photo_url: `/images/models/${motorcycle.model.replace(/\s+/g, '_').toLowerCase()}.png`,
+                        data_url: motorcycleFilePath
+                    };
+
+                    if (brandIndex !== -1) {
+                        data.marcas[brandIndex].models.push(newModel);
+                    } else {
+                        data.marcas.push({
+                            name: motorcycle.tipo,
+                            photo_url: '',
+                            models: [newModel]
+                        });
+                    }
+
+                    // Save the updated marcas.json file
+                    fetch('/static/datos/marcas.json', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Motorcycle data saved successfully!');
+                        } else {
+                            alert('Failed to update marcas.json.');
+                        }
+                    });
+                });
+        }
+        </script>
+    </body>
+</html>

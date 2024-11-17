@@ -1,0 +1,24 @@
+{
+    "id": [0],
+    "tipo": "triumph",
+    "model": "Triumph Street Triple SE 2013",
+    "url": "/models/triumph_speed_triple_se_2013.glb",
+    "position": [0, 0.5, -0.1],
+    "scale": [1, 1, 1],
+    "customs": [
+        {
+            "name": "Tubo de escape",
+            "img": "images/0/default.png",
+            "id": [1, 2, 3],
+            "title": ["Libre", "Arrow", "SC Project"],
+            "url": ["models/escape1.glb", "models/escape1.glb", "models/escape2.glb"],
+            "position": [[0, 0, 0], [0, 0.5, -0.1], [0, 0.5, -0.1]],
+            "scale": [[0, 0, 0], [1, 1, 1], [1, 1, 1]],
+            "selected": 0,
+            "image": ["images/default.png", "images/0/arrow.png", "images/0/SCproject.png"],
+            "price": [0, 256.34, 464.10],
+            "price_id": ["1", "price_1QIrUsH6YrdtkYECjoeGP1gS", "price_1QIs2TH6YrdtkYEC1Ho9CxZ6"]
+            
+        }
+    ]
+}
