@@ -6,6 +6,7 @@
     "url": "/models/1.glb",
     "position": [0, 0, 0],
     "scale": [1, 1, 1],
+    "povs": [[0, 2.5, 0],[3,0,3],[-3,0,-3]],
     "customs": [
         {
             "name": "Sofá",
@@ -31,7 +32,7 @@
             "url": ["models/21.glb", "models/22.glb"],
             "camera_position": [1.2,3.7,-0.9],
             "camera_target": [2.5, 0.5, -4],
-            "position": [[0, 0, 0], [0, 0, 0]],
+            "position": [[0, -0.1, 0], [0, -0.1, 0]],
             "scale": [[1, 1, 1], [1, 1, 1]],
             "selected": 1,
             "image": ["images/default.png", "images/0/arrow.png"],
