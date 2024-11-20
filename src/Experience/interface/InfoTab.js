@@ -14,7 +14,8 @@ export default class InfoTab {
     appearBox(custom,id) {
         const infoBox = document.getElementById('info-box');
 
-        infoBox.style.opacity = 0.9;
+        infoBox.style.opacity = 1;
+        infoBox.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
         infoBox.style.visibility = 'visible';
 
         //infoBox.querySelector('.image').src = custom.image[id];
@@ -110,17 +111,21 @@ export default class InfoTab {
 
     injectStyles() {
         const styles = `
+/* Base styles */
 .info-box {
     position: fixed;
     bottom: 27%;
     right: 1rem;
     width: 14rem; /* Adjusted for better responsiveness */
     height: auto;
-    background-color: var(--InfoBoxBackground); /* Replaced with variable */
+    background-color: #ffffff;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
     opacity: 0;
+    visibility: none;
+
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 100;
 }
@@ -150,7 +155,7 @@ export default class InfoTab {
     cursor: pointer;
 }
 
-.add-cart {
+.add-cart{
     display: flex;
     justify-content: center;
     height: 3rem;
@@ -159,44 +164,48 @@ export default class InfoTab {
     text-align: center;
     border-radius: 1rem;
     box-shadow: 2.3px 4.6px 4.6px hsl(0deg 0% 0% / 0.43);
-    background-color: var(--InfoBoxButton); /* Replaced with variable */
-    color: var(--Text); /* Replaced with variable */
+    background-color: #00ff00;
+    color: #fff;
     cursor: pointer;
     margin: 1rem auto;
+
     transition: all 0.3s ease;
 }
 
-.add-cart p {
+.add-cart p{
     font-size: 1.2rem;
+
 }
 
 .add-cart.selected {
-    background-color: var(--InfoBoxButtonSelected); /* Replaced with variable */
+    background-color: #433E43;
     cursor: auto;
-    pointer-events: none;
+    pointer-events:none;
 }
 
 .add-cart.unselected {
-    background-color: var(--InfoBoxButton); /* Replaced with variable */
+    background-color: #363E4F;
+
 }
 
-.add-cart.unselected:hover {
-    background-color: var(--CustomHover); /* Replaced with variable */
+.add-cart.unselected:hover{
+    background-color: #36454F;
 }
+
 
 .add-cart.stock {
     background-color: rgba(52, 73, 94, 0.6);
     cursor: auto;
-    pointer-events: none;
+    pointer-events:none;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 480px) {
     .info-box {
         left: 50%;
         transform: translate(-50%, 0);
-        width: auto;
-        bottom: 30%;
-        height: auto;
+        width: 60%;
+        top: 7rem;
+        bottom: unset;
         position: absolute;
     }
 

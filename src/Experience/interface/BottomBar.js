@@ -49,34 +49,37 @@ export default class BottomBar {
     // Bottom bar
     injectStylesComputer() {
         const styles = `
-            .wrapper {
-                width: 100%;
-                height: 25%;
-                display: flex;
-                flex-direction: column-reverse;
-                gap: 1vh;
-                bottom: 5%;
-                position: absolute;
-                justify-content:center;
-                align-content: center;
-                flex-wrap: wrap;
+            .wrapper{
+            width: 100%;
+            height: 25%;
+
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 1vh;
+
+            bottom: 5%;
+            position: absolute;
             }
 
-            .parent-container {
-                max-width: 60rem;
-
+            .parent-container{
+        
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
+
                 gap: 22px;
+
                 padding: 10px;
-                overflow: visible;
+
+                overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+                overflow-y: hidden; /* Disable vertical scrolling */
+
                 opacity: 1;
                 transition: opacity 0.3s ease; /* Smooth hover animation */
             }
 
-            .parent-container.overflow {
+            .parent-container.overflow{
                 justify-content: flex-start !important;
             }
 
@@ -85,70 +88,73 @@ export default class BottomBar {
             }
 
             .parent-container::-webkit-scrollbar-track {
-                background: var(--CustomHover);
+                background: #f9f9f9;
                 border-radius: 15px;
             }
 
             .parent-container::-webkit-scrollbar-thumb {
-                background-color: var(--Button);
+                background-color: #3498db;
                 border-radius: 15px;
-                border: 3px solid var(--CustomHover);
+                border: 3px solid #f9f9f9;
             }
 
             .parent-container::-webkit-scrollbar-button {
                 display: none; /* Remove the arrows */
             }
 
-            .parent-container:before {
+            .parent-container:before{
                 opacity: 0;
             }
 
-            .parent-square {
+            .parent-square{ 
                 min-width: fit-content;
-                background-color: var(--Parent);
+                background-color: rgba(52, 73, 94, 0.8); /* White with 90% opacity */
+
                 text-align: center;
-                vertical-align: middle;
+                vertical-align: middle; 
                 line-height: 50px;
                 font-size: 1.5rem;
-                color: var(--Text);
+                color: #fff;
+
                 border-radius: 45px;
                 cursor: pointer;
                 padding: 1rem 4rem;
-                box-shadow: 0px 6px 8px 3px rgba(0, 0, 0, 0.3);
-                transition: all 0.3s ease; /* Smooth hover animation */
+
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a nice shadow */
+                transition: font-size 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* Smooth hover animation */
                 white-space: nowrap; /* Prevent text from wrapping */
-                overflow-x: hidden; /* Hide overflow */
+                overflow: hidden; /* Hide overflow */
                 text-overflow: ellipsis; /* Add ellipsis if text overflows */
             }
 
-            .ParentSquareSelected {
-                font-size: 2rem !important;
-                font-weight: 1000;
-                color: var(--Text) !important;
-                background-color: var(--ParentSelected) !important;
-            }
-
-            .parent-square:hover {
+            .parent-square:hover{
                 font-size: 1.7rem;
-                padding: 1rem 4rem;
-                background-color: var(--ParentHover) !important;
-                box-shadow: 0px 4px 4px 2.0px rgba(0, 0, 0, 0.3);
+                background-color: rgba(52, 73, 94, 0.8); /* White with 90% opacity */
             }
 
-            .custom-container {
+            .ParentSquareSelected{
+                font-size: 2rem !important;
+                color: #fff !important;
+                background-color: rgba(52, 73, 94, 1) !important; /* White with 90% opacity */
+            }
+
+            .custom-container{
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
+
                 padding: 1rem;
                 gap: 30px;
+
                 overflow-x: auto; /* Enable horizontal scrolling if content overflows */
                 overflow-y: hidden; /* Disable vertical scrolling */
+
                 opacity: 0;
                 transition: opacity 0.3s ease; /* Smooth hover animation */
             }
 
-            .custom-container.overflow {
+            .custom-container.overflow{
                 justify-content: flex-start !important;
             }
 
@@ -157,12 +163,12 @@ export default class BottomBar {
             }
 
             .custom-container::-webkit-scrollbar-track {
-                background: var(--CustomHover);
+                background: #e7e7e7;
                 border-radius: 15px;
             }
 
             .custom-container::-webkit-scrollbar-thumb {
-                background-color: var(--Button);
+                background-color: #3498db;
                 border-radius: 15px;
             }
 
@@ -170,117 +176,114 @@ export default class BottomBar {
                 display: none; /* Remove the arrows */
             }
 
-            .hide {
+            .hide{
                 opacity: 0;
             }
 
-            .show {
+            .show{
                 opacity: 1;
             }
 
-            .custom-square {
+            .custom-square{
                 width: auto;
                 height: auto;
-                background-color: var(--Custom);
+                background-color: rgba(255, 255, 255, 0.8);
                 border-radius: 15px;
                 cursor: pointer;
                 display: inline-block;
+
                 text-align: center;
-                vertical-align: middle;
+                vertical-align: middle; 
                 line-height: 5vh;
                 font-size: 1.6rem;
-                color: var(--Text);
+                color: #000;
                 padding: 0.5rem 1.5rem;
+                
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a nice shadow */
-                transition: all 0.3s ease;
+                transition: all 0.3s ease;                
                 white-space: nowrap; /* Prevent text from wrapping */
             }
 
-            .CustomSquareSelected {
+            .CustomSquareSelected{
                 font-size: 2rem !important;
-                background-color: var(--CustomSelected) !important;
-                color: var(--Text);
+                background: #566F7F !important;
+                color: #fff
+
             }
 
-            .custom-square:hover {
+            .custom-square:hover{
                 font-size: 1.8rem;
-                background-color: var(--CustomHover); /* White with 90% opacity */
+                background-color: rgba(255, 255, 255, 0.9); /* White with 90% opacity */
             }
 
-            /* Tablet */
+            /*  Tablet  */
             @media (max-width: 1366px) {
                 /* Parent Square */
-                .parent-square {
+                .parent-square{ 
                     line-height: 50px;
                     font-size: 1rem;
                     padding: 0.5rem 3rem;
                 }
 
-                .parent-square:hover {
+                .parent-square:hover{
                     font-size: 1.2rem;
-                    background-color: var(--ParentHover); /* White with 90% opacity */
+                    background-color: rgba(52, 73, 94, 0.8); /* White with 90% opacity */
                 }
 
-                .ParentSquareSelected {
+                .ParentSquareSelected{
                     font-size: 1.4rem !important;
                 }
 
                 /* Custom Square */
-                .custom-square {
+                .custom-square{
                     line-height: 5vh;
                     font-size: 1rem;
                     padding: 0.3rem 1.2rem;
                 }
 
-                .custom-square:hover {
+                .custom-square:hover{
                     font-size: 1.1rem;
-                    background-color: var(--CustomHover); /* White with 90% opacity */
+                    background-color: rgba(255, 255, 255, 0.9); /* White with 90% opacity */
                 }
 
-                .CustomSquareSelected {
+                .CustomSquareSelected{
                     font-size: 1.3rem !important;
-                    padding: 0 1rem;
                 }
             }
 
-            /* Phone */
-            /*
-            @media (max-width: 1200px) {
-                .wrapper{
-                    bottom:1%;
-                }
-
-                .parent-square {
+            /*  Phone  */
+            @media (max-width: 414px) {
+                /* Parent Square */
+                .parent-square{ 
                     line-height: 50px;
                     font-size: 0.9rem;
                     padding: 0.1rem 1.4rem;
                 }
 
-                .parent-square:hover {
-                    font-size: 2rem;
-                    background-color: var(--ParentHover); /* White with 90% opacity */
+                .parent-square:hover{
+                    font-size: 0.7rem;
+                    background-color: rgba(52, 73, 94, 0.8); /* White with 90% opacity */
                 }
 
-                .ParentSquareSelected {
+                .ParentSquareSelected{
                     font-size: 1rem !important;
-                    padding: 0 1rem;
                 }
 
-                .custom-square {
+                /* Custom Square */
+                .custom-square{
                     line-height: 5vh;
                     font-size: 0.8rem;
                     padding: 0.1rem 1rem;
                 }
 
-                .custom-square:hover {
+                .custom-square:hover{
                     font-size: 0.9em;
-                    background-color: var(--CustomHover); /* White with 90% opacity */
+                    background-color: rgba(255, 255, 255, 0.9); /* White with 90% opacity */
                 }
 
-                .CustomSquareSelected {
+                .CustomSquareSelected{
                     font-size: 1rem !important;
-                    padding: 0 2.4rem;
-                }*/
+                }
             }
         `;
 
