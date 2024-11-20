@@ -1,6 +1,7 @@
 // ModelLoader.js
 import * as THREE from 'three'
 import Experience from './Main';
+import * as object from './Objects.js';
 
 export default class ModelLoader {
     constructor(scene) {

@@ -143,7 +143,7 @@ export default class SelectObject extends EventEmitter {
 
         const title = document.createElement('h1');
         title.className = 'title';
-        title.textContent = '';
+        title.textContent = 'Selecciona la marca:';
         container.appendChild(title);
 
         const brandContainer = document.createElement('div');
@@ -193,7 +193,7 @@ export default class SelectObject extends EventEmitter {
 
             const title = document.createElement('h1');
             title.className = 'title';
-            title.textContent = 'Selecciona el inmueble:';
+            title.textContent = 'Selecciona tu moto:';
             container.appendChild(title);
 
             const modelContainer = document.createElement('div');

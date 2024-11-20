@@ -1,6 +1,5 @@
 {
-    "marcas": 
-    [
+    "marcas": [
         {
             "name": "",
             "photo_url": "/images/logos/sandoval-1.png",
@@ -17,25 +16,5 @@
                 }
             ]
         }
-    ],
-    "paleta": {
-        "ParentHover": "#ddd1b6",
-        "ParentSelected": "#e5dcc8",
-        "Parent": "#ede7d9",
-        "CustomHover": "#f2e7e4",
-        "CustomSelected": "#edddd9",
-        "Custom": "#f9f4f3",
-        "ButtonHover": "#d5a021",
-        "ButtonSelected": "#d5a021",
-        "Button": "#d5a021",
-        "TextHighlight": "#",
-        "Text": "#023047",
-        "Topnav": "#ede7d9",
-        "TopnavButton": "#d5a021",
-        "TopnavButtonHover": "#d5a021",
-        "InfoBoxBackground": "#ede7d9",
-        "InfoBoxButton": "#d5a021",
-        "InfoBoxButtonHover": "#ddb34d ",
-        "InfoBoxButtonSelected": "#EED9A6"
-    }
+    ]
 }
