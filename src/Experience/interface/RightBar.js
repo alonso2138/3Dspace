@@ -142,6 +142,7 @@ export default class RightBar {
 
         // Create total div
         const totalDiv = document.createElement('div');
+        totalDiv.className = 'TotalDiv';
         totalDiv.innerHTML = 'Total: <span id="Total" class="font-bold">0.00 €</span>';
         costBox.appendChild(totalDiv);
 
@@ -278,7 +279,7 @@ export default class RightBar {
 
         // Create box title
         const boxTitle = document.createElement('h2');
-        boxTitle.textContent = 'Triumph Speed Triple Se';
+        boxTitle.textContent = 'Personalizaciones'; 
         box.appendChild(boxTitle);
 
         // Create list
@@ -343,7 +344,6 @@ export default class RightBar {
         const styles=
         `
         body {
-            background-color: #f0f0f0;
             font-family: 'Arial', sans-serif;
             transition: filter 0.5s ease;
 
@@ -351,44 +351,51 @@ export default class RightBar {
 
 
         #notification{
-            opacity:0;
+            opacity:1;
 
-            position: absolute;
+            position: fixed;
             height: 1rem;
             width: 1rem;
             border-radius: 50%;
-            background-color: red;
+            background-color: #ff0000; /* Example variable */
+            top:0;
+            right:0;
+            //transform: translate(580%, -100%);
 
-            transform: translate(580%, -100%);
-
-            transition: opacity 0.5s ease;
+            transition: all 0.5s ease;
         }
 
         .top-nav-wrapper {
             position: fixed;
             z-index: 2;
-            top: 0;
+            top: 5%;
             left: 0;
             right: 0;
-            background-color: rgba(52, 73, 94, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display:flex;
+            background-color: rgba(0,0,0,0);
             height: 6rem;
             justify-content: center;
+            text-align:center;
             width: 100%;
             align-items: center;
             display: flex;
+            flex-wrap: wrap;
         }
 
         .top-nav {
+            background-color: var(--Topnav);
             max-width: 60rem;
             height: 100%;
             width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            justify-content: space-around;
+            border-radius: 4rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+
         }
         .top-nav button, .top-nav img, .top-nav .logo {
-            color: #ffffff;
+            color: var(--Text);
         }
         .top-nav .logo {
             font-size: 1.5rem;
@@ -402,10 +409,14 @@ export default class RightBar {
             position: relative;
         }
         .title {
-            color: #ffffff;
+            height: 100%;
+            text-align: center;
+            color: var(--Text);
             text-decoration: underline;
             font-size: 1.5rem;
             font-weight: bold;
+            display: flex;
+            align-items: center;
         }
 
         #Total {
@@ -419,7 +430,7 @@ export default class RightBar {
             width: auto;
             height: 100%;
             padding: 0 1rem;
-            color: #fff;
+            color: var(--Text);
             text-align: center;
             bottom: 0;
             transition: width 0.3s ease;
@@ -430,22 +441,22 @@ export default class RightBar {
             align-items: center;
             justify-content: center;
             margin-top: 0.5rem;
-            color: rgba(0, 0, 0, 1);
+            color: var(--Text);
             font-size: 1rem;
             cursor: pointer;
             padding: 0.5rem 1rem;
             border:none;
             border-radius: 0.5rem;
             
-            background-color: rgba(255, 255, 255, 1);
+            background-color: var(--Button);
 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
             transition: all 0.3s ease;
         }
         .cost-box button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: rgba(52, 73, 94, 0.8);
+            background-color: var(--ButtonHover);
+            color: var(--TextHighlight);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
         .cost-box button i {
@@ -460,7 +471,7 @@ export default class RightBar {
             margin-left: 1rem;
             font-size: 2rem;
             cursor: pointer;
-            color: #333;
+            color: var(--Text);
             background-color: rgba(255, 255, 255, 0);
             border: none;
             text-decoration: none;
@@ -487,25 +498,26 @@ export default class RightBar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #3b82f6;
+            background-color: var(--ButtonSelected);
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg'); /* Example user icon */
             background-size: cover;
             background-position: center;
-            color: #ffffff;
+            color: var(--Text);
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .user-button:hover {
-            background-color: #1e40af;
+            background-color: var(--ButtonHover);
             transform: scale(1.1);
         }
 
         .mr-2 {
-            height: 1.5rem;
-            object-fit: contain;
-            border: 1px solid #ffffff;
-            border-radius: 10%; /* Adjust the percentage to get the desired roundness */
+            width: 2rem;
+            height: 2rem;
+            object-fit: cover;
+            border: 1px solid var(--Text);
+            border-radius: 5rem; /* Adjust the percentage to get the desired roundness */
             overflow: hidden; /* Ensure the border follows the shape of the image */
         }
 
@@ -531,13 +543,15 @@ export default class RightBar {
             transition: opacity 0.3s ease;
         }
         .overlay .box {
-            background-color: #ffffff;
+            background-color: var(--InfoBoxBackground);
             padding: 2rem;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 500px;
+            text-align: center; 
+            left:5%;
+            right:5%;
+
+
         }
         .overlay .box h2 {
             font-size: 1.5rem;
@@ -556,8 +570,8 @@ export default class RightBar {
             margin-bottom: 1rem;
         }
         .overlay .box .checkout {
-            background-color: #10b981;
-            color: #ffffff;
+            background-color: var(--ButtonSelected);
+            color: var(--Text);
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             cursor: pointer;
@@ -565,10 +579,10 @@ export default class RightBar {
             transition: background-color 0.3s ease;
         }
         .overlay .box .checkout:hover {
-            background-color: #059669;
+            background-color: var(--ButtonHover);
         }
         .overlay .box .back {
-            color: #6b7280;
+            color: var(--Text);
             cursor: pointer;
             margin-bottom: 1rem;
             transition: text-decoration 0.3s ease;
@@ -583,7 +597,7 @@ export default class RightBar {
             height: 1.5rem;
             object-fit: contain;
             border-radius: 0.5rem;
-            border: 1px solid #d1d5db;
+            border: 1px solid var(--Text);
             opacity: 1;
 
             transition: all 0.3s ease;
@@ -594,6 +608,7 @@ export default class RightBar {
         }
 
         .confirmation-overlay {
+        font-weight: 700;
         opacity: 0;
             pointer-events:none;
                 position: fixed;
@@ -601,15 +616,16 @@ export default class RightBar {
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
+                background: rgba(255, 255, 255, 0.8);
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 200;
                 }
                 .confirmation-box {
+                margin: 0 5%;
                 opacity:1;
-                background: white;
+                background: var(--InfoBoxBackground);
                 padding: 2rem;
                 border-radius: 0.5rem;
                 text-align: center;
@@ -619,21 +635,26 @@ export default class RightBar {
                 margin-bottom: 1rem;
                 }
                 .cancel-button {
-                background: #f0f0f0;
-                color: #333;
+                background: var(--CustomHover);
+                color: var(--Text);
                 border: none;
                 padding: 0.5rem 1rem;
                 border-radius: 0.5rem;
                 cursor: pointer;
                 margin-right: 1rem;
                 transition: background-color 0.3s ease;
+                    box-shadow: 2.3px 4.6px 4.6px hsl(0deg 0% 0% / 0.43);
+
                 }
                 .cancel-button:hover {
-                background: #e0e0e0;
+
+                background: #edddd9;
                 }
                 .confirm-button {
-                background: #a3e635;
-                color: #333;
+                background: #e9edd9;
+                    box-shadow: 2.3px 4.6px 4.6px hsl(0deg 0% 0% / 0.43);
+
+                color: var(--Text);
                 border: none;
                 padding: 0.5rem 1rem;
                 border-radius: 0.5rem;
@@ -641,7 +662,7 @@ export default class RightBar {
                 transition: background-color 0.3s ease;
                 }
                 .confirm-button:hover {
-                background: #8bc34a;
+                background: var(--ParentHover);
         }
 
         @media (max-width: 768px) {
@@ -652,10 +673,38 @@ export default class RightBar {
                 margin-bottom: 0;
             }
             .cost-box {
-                margin-top: 1rem;
-                width: 100%;
-                
+                width: 50%;
             }
+
+            .top-nav{
+                margin: 0 20px;
+            }
+
+            .top-nav-wrapper{
+                height: 4rem;
+            }
+            
+            .title{
+                display:none;
+            }
+
+            #Total{
+                display:none;
+            }
+
+            .TotalDiv{
+                display:none;
+            }
+
+            .cost-box button{
+                font: 1.5rem;
+                text-align:center;
+            }         
+                
+            #notification {
+                transform: translate(0%, -100%);
+            }
+
         }
         `
 
@@ -664,6 +713,19 @@ export default class RightBar {
         styleSheet.innerText = styles;
         document.head.appendChild(styleSheet);
     }
+
+    resize(){
+        const totalElement1 = document.getElementById('toggle-cart');
+        const gilipoya = '<div id="notification"></div>';
+
+        if(window.innerWidth<768){
+            totalElement1.innerHTML = ' 🛒 '+gilipoya;
+        }else{
+            
+            totalElement1.innerHTML = '🛒 Personalizaciones'+gilipoya;
+        }
+
+    }    
 
     updateList() {
         const overlay = document.getElementById('cart-overlay');

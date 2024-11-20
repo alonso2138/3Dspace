@@ -3,11 +3,13 @@ import Experience from './Main.js'
 import { gsap } from 'gsap';
 //import { OrbitControls } from "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import MobilePov from './interface/MobilePov.js';
 
 export default class SceneSetup {
     constructor(canvas) {
 
         this.experience = new Experience();
+        this.mobilePov = new MobilePov();
         this.scene = new THREE.Scene();
 
         //Ressources
@@ -17,8 +19,8 @@ export default class SceneSetup {
         this.canvas = canvas
 
         // Original camera pos
-        this.cameraOriginal = [0, 2.6, 0.1]
-        this.targetOriginal = [0, 2.5, 0]
+        this.cameraOriginal = [0, 2.4, 0.1]
+        this.targetOriginal = [0, 2.3, 0]
 
         this.setupCamera();
         this.setupRenderer();
@@ -26,7 +28,7 @@ export default class SceneSetup {
     }
 
     setupCamera() {
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
         this.camera.position.set(this.cameraOriginal[0], this.cameraOriginal[1], this.cameraOriginal[2]); // Posición de la cámara para ver el objeto
 
         // this.Controls for rotating the scene
@@ -57,22 +59,24 @@ export default class SceneSetup {
     }
 
     moveCamera(cam,target){
-        console.log(cam)
-        // Pos as vector3
-        gsap.to(this.camera.position, {
-            x: cam[0],
-            y: cam[1],
-            z: cam[2],
-            duration: 1 // Adjust the duration as needed
-        });
-
-        // Pos as vector3
-        gsap.to(this.controls.target, {
-            x: target[0],
-            y: target[1],
-            z: target[2],
-            duration: 1 // Adjust the duration as needed
-        });
+        if(cam){
+            // Pos as vector3
+            gsap.to(this.camera.position, {
+                x: cam[0],
+                y: cam[1],
+                z: cam[2],
+                duration: 1 // Adjust the duration as needed
+            });
+        }
+        if(target){
+            // Pos as vector3
+            gsap.to(this.controls.target, {
+                x: target[0],
+                y: target[1],
+                z: target[2],
+                duration: 1 // Adjust the duration as needed
+            });
+        }
     }
 
     resetCamera(){
@@ -118,7 +122,13 @@ export default class SceneSetup {
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize( window.innerWidth, window.innerHeight );
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        this.renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2))
+
+        if(window.innerWidth<768){
+            this.mobilePov.startMobilePov();
+        }else {
+            this.mobilePov.endMobilePov();
+        }
     }
 
     render() {
