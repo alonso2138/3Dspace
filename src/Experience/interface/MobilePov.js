@@ -19,6 +19,8 @@ export default class MobilePov{
     }
 
     startMobilePov(){
+        if(document.querySelector('.puntosWrapper')) return;
+
         const wrapper = document.createElement('div');
         wrapper.className="puntosWrapper";
         for(let i = 0; i < this.experience.moto.povs.length;i++){

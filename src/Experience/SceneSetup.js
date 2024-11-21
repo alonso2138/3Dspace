@@ -76,6 +76,20 @@ export default class SceneSetup {
                 duration: 1 // Adjust the duration as needed
             });
         }
+
+        // If the camera vector is not defined, to avoid bugs, the target distance to the camera should be forced to 1.5 units
+        if(!cam){
+            const targetVector = new THREE.Vector3(target[0], target[1], target[2]);
+            const direction = new THREE.Vector3().subVectors(this.camera.position, targetVector).normalize();
+            const newPosition = new THREE.Vector3().addVectors(targetVector, direction.multiplyScalar(1.5));
+    
+            gsap.to(this.camera.position, {
+                x: newPosition.x,
+                y: newPosition.y,
+                z: newPosition.z,
+                duration: 1 // Adjust the duration as needed
+            });
+        }
     }
 
     resetCamera(){
@@ -126,7 +140,9 @@ export default class SceneSetup {
         if(window.innerWidth<768){
             this.mobilePov.startMobilePov();
         }else {
-            this.mobilePov.endMobilePov();
+            this.mobilePov.startMobilePov();
+
+//            this.mobilePov.endMobilePov();
         }
     }
 
