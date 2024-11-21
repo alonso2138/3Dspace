@@ -1,7 +1,6 @@
 // SceneSetup.js
 import Experience from './Main.js'
 import { gsap } from 'gsap';
-//import { OrbitControls } from "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import MobilePov from './interface/MobilePov.js';
 
@@ -122,7 +121,7 @@ export default class SceneSetup {
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize( window.innerWidth, window.innerHeight );
-        this.renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2))
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
         if(window.innerWidth<768){
             this.mobilePov.startMobilePov();

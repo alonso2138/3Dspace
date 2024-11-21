@@ -59,7 +59,7 @@ export default class BottomBar {
                 position: absolute;
                 justify-content:center;
                 align-content: center;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
             }
 
             .parent-container {

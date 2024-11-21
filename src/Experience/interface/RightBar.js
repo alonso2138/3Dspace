@@ -344,7 +344,6 @@ export default class RightBar {
         const styles=
         `
         body {
-            font-family: 'Arial', sans-serif;
             transition: filter 0.5s ease;
 
         }

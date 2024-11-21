@@ -1,7 +1,10 @@
+import Experience from "../Main";
+
 export default class LoadColors {
     constructor() {        
-        // Generate the HTML and inject styles
-        this.LoadColors();
+        this.experience = new Experience();
+        this.paleta = this.experience.loadMarcas.paleta;
+        this.setCSSVariables();
     }
 
     async LoadColors() {
@@ -37,7 +40,8 @@ export default class LoadColors {
         }
     }
 
-    setCSSVariables() {
+    async setCSSVariables(paleta) {
+        await this.paleta;
         const root = document.documentElement;
         root.style.setProperty('--ParentHover', this.paleta.ParentHover);
         root.style.setProperty('--ParentSelected', this.paleta.ParentSelected);

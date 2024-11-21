@@ -16,6 +16,7 @@ export default class InfoTab {
 
         infoBox.style.opacity = 0.9;
         infoBox.style.visibility = 'visible';
+        infoBox.style.pointerEvents = 'all';
 
         //infoBox.querySelector('.image').src = custom.image[id];
         infoBox.querySelector('.description').textContent = custom.title[id];
@@ -77,6 +78,7 @@ export default class InfoTab {
         const infoBox = document.getElementById('info-box');
         infoBox.style.opacity = 0;
         infoBox.style.visibility = 'hidden';
+        infoBox.style.pointerEvents = 'none';
     }
 
     generateHTML() {
@@ -121,6 +123,7 @@ export default class InfoTab {
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     opacity: 0;
+    pointer-events:none;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 100;
 }
@@ -192,10 +195,10 @@ export default class InfoTab {
 
 @media (max-width: 800px) {
     .info-box {
-        left: 50%;
-        transform: translate(-50%, 0);
+        top: 8rem;
+        bottom: unset;
+        right: 5%;
         width: auto;
-        bottom: 30%;
         height: auto;
         position: absolute;
     }

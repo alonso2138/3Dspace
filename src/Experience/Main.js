@@ -12,6 +12,8 @@ import SelectObject from './interface/SelectObject.js';
 import LoadingBar from './interface/LoadingBar.js';
 import LoadColors from './interface/LoadColors.js';
 import Outline from './Model/Outline.js';
+import Stats from 'stats.js';
+import LoadMarcas from './Model/LoadMarcas.js';
 
 let instance = null;
  
@@ -23,14 +25,31 @@ export default class Experience {
         }
         instance = this;
 
+        this.contador=0;
+
         // Global access
         window.experience = this;
         window.addEventListener( 'resize', this.resizeEvent.bind(this),false);
         this.canvas = _canvas;
 
-        // Cargar Colores
-        this.LoadColors = new LoadColors();
+        // Initialize this.stats
+        this.stats = new Stats();
+        this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(this.stats.dom);
 
+        // Initialize LoadMarcas
+        this.init();
+    }
+
+    async init(){
+        // Carcar marcas
+        this.loadMarcas = new LoadMarcas();
+        await this.loadMarcas.init();
+        
+        // Load colors
+        this.loadColors = new LoadColors();
+
+        // Start the scene
         try{
             const quickCookie = this.getCookie('currentMoto');
             //console.log(quickCookie);
@@ -42,16 +61,12 @@ export default class Experience {
         }catch(e){
             console.log(e);
         }
-
     }
-
-
 
     startNormal(){
         // Model selection
         this.selectObject = new SelectObject();
         //Initialize the model selection interface
-        this.selectObject.init();
         this.selectObject.on('modelSelected', (path) => {
             // Show canvas
             this.canvas.style.display = 'block';
@@ -152,6 +167,7 @@ export default class Experience {
         if(this.bottomBar)  this.bottomBar.destroyBottomBar();
         if(this.rightBar) this.rightBar.deleteRightBar();
         if(this.infoTab) this.infoTab.deleteInfoTab();
+        if(this.sceneSetup.mobilePov) this.sceneSetup.mobilePov.endMobilePov();
 
         // Clear existing state if necessary
         if (this.scene) {
@@ -173,7 +189,7 @@ export default class Experience {
             this.piezaEditando=id;
             setTimeout(() => {
                 this.startEditing();
-                this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
+                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
 
             }, this.bottomBar.animationTimeout);
         
@@ -188,7 +204,7 @@ export default class Experience {
                 this.piezaEditando=id;
                 
                 this.stopEditing(true);
-                this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
+                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
 
                 setTimeout(() => {
                     this.startEditing();
@@ -221,7 +237,7 @@ export default class Experience {
 
         //Ahora se llama el model loader
         this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
-        this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
+        if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
 
         if(this.rightBar) this.rightBar.updateList( this.piezaEditando, this.moto.customs[ this.piezaEditando].title[id], this.moto.customs[ this.piezaEditando].price[id]);
     }
@@ -234,7 +250,7 @@ export default class Experience {
         if(this.piezaEditando==undefined) return;
         const id=this.piezaEditando
         this.bottomBar.deleteBottomBar();
-        this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[id]);
+        if(this.outline) this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[id]);
         if(cameraReset) this.sceneSetup.resetCamera();
         if(this.infoTab) this.infoTab.disappearBox();
         this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
@@ -322,7 +338,14 @@ export default class Experience {
 
     update()
     {
+        this.contador++;
+
+        this.stats.begin()
         this.sceneSetup.render();
-        this.outline.composer.render();
+
+        if(this.piezaEditando!=undefined){
+            this.outline.composer.render();
+        }
+        this.stats.end()
     }
 }
