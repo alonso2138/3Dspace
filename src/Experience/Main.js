@@ -10,6 +10,10 @@ import InfoTab from './interface/InfoTab.js';
 import Resources from './Resources.js';
 import SelectObject from './interface/SelectObject.js';
 import LoadingBar from './interface/LoadingBar.js';
+import LoadColors from './interface/LoadColors.js';
+import Outline from './Model/Outline.js';
+import Stats from 'stats.js';
+import LoadMarcas from './Model/LoadMarcas.js';
 
 let instance = null;
  
@@ -21,11 +25,31 @@ export default class Experience {
         }
         instance = this;
 
+        this.contador=0;
+
         // Global access
         window.experience = this;
         window.addEventListener( 'resize', this.resizeEvent.bind(this),false);
         this.canvas = _canvas;
 
+        // Initialize this.stats
+        this.stats = new Stats();
+        this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(this.stats.dom);
+
+        // Initialize LoadMarcas
+        this.init();
+    }
+
+    async init(){
+        // Carcar marcas
+        this.loadMarcas = new LoadMarcas();
+        await this.loadMarcas.init();
+        
+        // Load colors
+        this.loadColors = new LoadColors();
+
+        // Start the scene
         try{
             const quickCookie = this.getCookie('currentMoto');
             //console.log(quickCookie);
@@ -37,14 +61,12 @@ export default class Experience {
         }catch(e){
             console.log(e);
         }
-
     }
 
     startNormal(){
         // Model selection
         this.selectObject = new SelectObject();
         //Initialize the model selection interface
-        this.selectObject.init();
         this.selectObject.on('modelSelected', (path) => {
             // Show canvas
             this.canvas.style.display = 'block';
@@ -99,6 +121,7 @@ export default class Experience {
                 url: jsonData.url,
                 position: jsonData.position,
                 scale: jsonData.scale,
+                povs: jsonData.povs,
                 customs: jsonData.customs
             };
 
@@ -144,6 +167,7 @@ export default class Experience {
         if(this.bottomBar)  this.bottomBar.destroyBottomBar();
         if(this.rightBar) this.rightBar.deleteRightBar();
         if(this.infoTab) this.infoTab.deleteInfoTab();
+        if(this.sceneSetup.mobilePov) this.sceneSetup.mobilePov.endMobilePov();
 
         // Clear existing state if necessary
         if (this.scene) {
@@ -159,45 +183,34 @@ export default class Experience {
     // Callback function for parent square click
     onParentSquareClick(id) {
         //Check if there are already customs shown
-        if( this.piezaEditando==undefined){            
+        if( this.piezaEditando==undefined){        
+        console.log(this.piezaEditando)
+
             this.piezaEditando=id;
             setTimeout(() => {
-                this.bottomBar.generateBottomBar(this.moto.customs,id);
-                this.sceneSetup.moveCamera(this.moto.customs[id].camera_position, this.moto.customs[id].camera_target);
-                document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
+                this.startEditing();
+                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
+
             }, this.bottomBar.animationTimeout);
         
             //Check if we want to hide customs or to change customs
         }else {
             if( this.piezaEditando==id){
+
+                this.stopEditing(true);
                 this.piezaEditando=undefined;
 
-                this.bottomBar.deleteBottomBar();
-                this.sceneSetup.resetCamera();
-                if(this.infoTab) this.infoTab.disappearBox();
-                this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
-
-                document.getElementById('ParentSquare'+id).classList.remove('ParentSquareSelected');
-        
             }else{
-                document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
-                    this.piezaEditando=id;
-                this.bottomBar.deleteBottomBar();
-                this.sceneSetup.resetCamera();
-                if(this.infoTab) this.infoTab.disappearBox();
-                this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
+                this.piezaEditando=id;
+                
+                this.stopEditing(true);
+                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
 
                 setTimeout(() => {
-                    this.bottomBar.generateBottomBar(this.moto.customs,id);
-                    this.sceneSetup.moveCamera(this.moto.customs[id].camera_position, this.moto.customs[id].camera_target);
-                    document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
-
+                    this.startEditing();
                 }, this.bottomBar.animationTimeout);
             }
         }
-
-
-
     }
 
     // Callback function for square click
@@ -224,21 +237,32 @@ export default class Experience {
 
         //Ahora se llama el model loader
         this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
-
-        // Custom clickado es el seleccionado
-        if(id==this.moto.customs[this.piezaEditando].selected){
-            
-        }else{
-            // Confirmar y añadir al carrito => Se ejecuta addToCart en right bar
-            // Click fuera => disappearBox()
-            // Click otro custom
-        }
+        if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
 
         if(this.rightBar) this.rightBar.updateList( this.piezaEditando, this.moto.customs[ this.piezaEditando].title[id], this.moto.customs[ this.piezaEditando].price[id]);
     }
 
     infoTabAppear(id){
         if(this.infoTab) this.infoTab.appearBox(this.moto.customs[this.piezaEditando],id);
+    }
+
+    stopEditing(cameraReset){
+        if(this.piezaEditando==undefined) return;
+        const id=this.piezaEditando
+        this.bottomBar.deleteBottomBar();
+        if(this.outline) this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[id]);
+        if(cameraReset) this.sceneSetup.resetCamera();
+        if(this.infoTab) this.infoTab.disappearBox();
+        this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
+        document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
+    }
+
+    startEditing(){
+        const id = this.piezaEditando;
+        this.sceneSetup.mobilePov.removeSelection();
+        this.bottomBar.generateBottomBar(this.moto.customs,id);
+        this.sceneSetup.moveCamera(this.moto.customs[id].camera_position, this.moto.customs[id].camera_target);
+        document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
     }
 
     onSquareUnHover(){
@@ -284,13 +308,15 @@ export default class Experience {
         this.bottomBar = new BottomBar('square-container', this.onSquareClick.bind(this), this.onParentSquareClick.bind(this), this.infoTabAppear.bind(this), this.onSquareUnHover.bind(this));
         this.bottomBar.init();
 
+        this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
+
         // Load main Object
-        this.modelLoader.loadModel(this.moto, undefined, 0);
+        this.modelLoader.loadModel(this.moto, undefined, 0,false);
 
         // Generate boxes and model for each type of piece
         for (let i = 0; i < this.moto.customs.length; i++) {
             this.bottomBar.generateCustom(this.moto.customs[i], i);
-            this.modelLoader.loadModel(this.moto.customs[i], i, this.moto.customs[i].selected);
+            this.modelLoader.loadModel(this.moto.customs[i], i, this.moto.customs[i].selected,false);
         }
 
         // Time tick event
@@ -304,14 +330,22 @@ export default class Experience {
 
     }
 
-
     resizeEvent(){
         if (this.sceneSetup) this.sceneSetup.resize();
         if (this.bottomBar) this.bottomBar.resize();
+        if (this.rightBar) this.rightBar.resize();
     }
 
     update()
     {
+        this.contador++;
+
+        this.stats.begin()
         this.sceneSetup.render();
+
+        if(this.piezaEditando!=undefined){
+            this.outline.composer.render();
+        }
+        this.stats.end()
     }
 }

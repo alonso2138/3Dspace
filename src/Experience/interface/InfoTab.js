@@ -14,9 +14,9 @@ export default class InfoTab {
     appearBox(custom,id) {
         const infoBox = document.getElementById('info-box');
 
-        infoBox.style.opacity = 1;
-        infoBox.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        infoBox.style.opacity = 0.9;
         infoBox.style.visibility = 'visible';
+        infoBox.style.pointerEvents = 'all';
 
         //infoBox.querySelector('.image').src = custom.image[id];
         infoBox.querySelector('.description').textContent = custom.title[id];
@@ -78,6 +78,7 @@ export default class InfoTab {
         const infoBox = document.getElementById('info-box');
         infoBox.style.opacity = 0;
         infoBox.style.visibility = 'hidden';
+        infoBox.style.pointerEvents = 'none';
     }
 
     generateHTML() {
@@ -111,21 +112,18 @@ export default class InfoTab {
 
     injectStyles() {
         const styles = `
-/* Base styles */
 .info-box {
     position: fixed;
     bottom: 27%;
     right: 1rem;
     width: 14rem; /* Adjusted for better responsiveness */
     height: auto;
-    background-color: #ffffff;
+    background-color: var(--InfoBoxBackground); /* Replaced with variable */
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
     opacity: 0;
-    visibility: none;
-
+    pointer-events:none;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 100;
 }
@@ -155,7 +153,7 @@ export default class InfoTab {
     cursor: pointer;
 }
 
-.add-cart{
+.add-cart {
     display: flex;
     justify-content: center;
     height: 3rem;
@@ -164,48 +162,44 @@ export default class InfoTab {
     text-align: center;
     border-radius: 1rem;
     box-shadow: 2.3px 4.6px 4.6px hsl(0deg 0% 0% / 0.43);
-    background-color: #00ff00;
-    color: #fff;
+    background-color: var(--InfoBoxButton); /* Replaced with variable */
+    color: var(--Text); /* Replaced with variable */
     cursor: pointer;
     margin: 1rem auto;
-
     transition: all 0.3s ease;
 }
 
-.add-cart p{
+.add-cart p {
     font-size: 1.2rem;
-
 }
 
 .add-cart.selected {
-    background-color: #433E43;
+    background-color: var(--InfoBoxButtonSelected); /* Replaced with variable */
     cursor: auto;
-    pointer-events:none;
+    pointer-events: none;
 }
 
 .add-cart.unselected {
-    background-color: #363E4F;
-
+    background-color: var(--InfoBoxButton); /* Replaced with variable */
 }
 
-.add-cart.unselected:hover{
-    background-color: #36454F;
+.add-cart.unselected:hover {
+    background-color: var(--CustomHover); /* Replaced with variable */
 }
-
 
 .add-cart.stock {
     background-color: rgba(52, 73, 94, 0.6);
     cursor: auto;
-    pointer-events:none;
+    pointer-events: none;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 800px) {
     .info-box {
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 60%;
-        top: 7rem;
+        top: 8rem;
         bottom: unset;
+        right: 5%;
+        width: auto;
+        height: auto;
         position: absolute;
     }
 

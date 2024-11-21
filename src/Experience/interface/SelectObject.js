@@ -1,25 +1,13 @@
 import EventEmitter from '../EventEmitter.js';
+import Experience from '../Main.js';
 
 export default class SelectObject extends EventEmitter {
     constructor() {
         super();
-        this.brands = [];
+        this.experience = new Experience();
+
+        this.brands = this.experience.loadMarcas.marcas;
         this.init();
-    }
-
-    async fetchJSONData() {
-        try {
-            const response = await fetch('/datos/marcas.json');
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error loading JSON data:', error);
-            throw error;
-        }
-    }
-
-    extractBrands(data) {
-        this.brands = data.marcas;
     }
 
     injectStyles() {
@@ -138,12 +126,16 @@ export default class SelectObject extends EventEmitter {
     }
 
     generateBrandHTML() {
+        console.log(this.brands)
+
+        document.body.innerHTML = '';
+
         const container = document.createElement('div');
         container.className = 'container';
 
         const title = document.createElement('h1');
         title.className = 'title';
-        title.textContent = 'Selecciona la marca:';
+        title.textContent = '';
         container.appendChild(title);
 
         const brandContainer = document.createElement('div');
@@ -193,7 +185,7 @@ export default class SelectObject extends EventEmitter {
 
             const title = document.createElement('h1');
             title.className = 'title';
-            title.textContent = 'Selecciona tu moto:';
+            title.textContent = 'Selecciona el inmueble:';
             container.appendChild(title);
 
             const modelContainer = document.createElement('div');
@@ -254,8 +246,6 @@ export default class SelectObject extends EventEmitter {
 
     async init() {
         this.injectStyles();
-        const data = await this.fetchJSONData();
-        this.extractBrands(data);
         this.generateBrandHTML();
     }
 }
