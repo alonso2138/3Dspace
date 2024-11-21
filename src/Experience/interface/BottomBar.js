@@ -63,7 +63,7 @@ export default class BottomBar {
             }
 
             .parent-container {
-                max-width: 60rem;
+                width: 100%;
 
                 display: flex;
                 flex-direction: row;
