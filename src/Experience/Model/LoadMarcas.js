@@ -5,7 +5,6 @@ export default class LoadMarcas {
         const data = await this.fetchJSONData();
         this.marcas = data.marcas;
         this.paleta = data.paleta
-        console.log("definido chat")
     }
 
     async fetchJSONData() {

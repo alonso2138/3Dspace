@@ -184,8 +184,6 @@ export default class Experience {
     onParentSquareClick(id) {
         //Check if there are already customs shown
         if( this.piezaEditando==undefined){        
-        console.log(this.piezaEditando)
-
             this.piezaEditando=id;
             setTimeout(() => {
                 this.startEditing();
@@ -201,9 +199,9 @@ export default class Experience {
                 this.piezaEditando=undefined;
 
             }else{
-                this.piezaEditando=id;
                 
                 this.stopEditing(true);
+                this.piezaEditando=id;
                 if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
 
                 setTimeout(() => {
@@ -255,6 +253,8 @@ export default class Experience {
         if(this.infoTab) this.infoTab.disappearBox();
         this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
         document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
+        console.log(this.piezaEditando)
+        console.log(document.getElementById('ParentSquare'+this.piezaEditando))
     }
 
     startEditing(){
