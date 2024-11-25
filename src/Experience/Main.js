@@ -330,7 +330,7 @@ export default class Experience {
         this.resizeEvent();
 
         // Initialize welcome
-        //this.welcome = new Welcome();
+        this.welcome = new Welcome();
     }
 
     resizeEvent(){
