@@ -309,10 +309,7 @@ export default class Experience {
 
         this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
 
-        console.log(this.sceneSetup.mobilePov)
-
-        // Initialize welcome
-        this.welcome = new Welcome();
+        console.log(document.querySelector('.puntosWrapper'))
 
         // Load main Object
         this.modelLoader.loadModel(this.moto, undefined, 0,false);
@@ -332,6 +329,8 @@ export default class Experience {
         // Resize to set everything on load
         this.resizeEvent();
 
+        // Initialize welcome
+        this.welcome = new Welcome();
     }
 
     resizeEvent(){
