@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import EventEmitter from './EventEmitter.js';
 
 let instance = null;

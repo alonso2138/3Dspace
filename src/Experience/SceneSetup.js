@@ -6,7 +6,6 @@ import MobilePov from './interface/MobilePov.js';
 
 export default class SceneSetup {
     constructor(canvas) {
-
         this.experience = new Experience();
         this.mobilePov = new MobilePov();
         this.scene = new THREE.Scene();

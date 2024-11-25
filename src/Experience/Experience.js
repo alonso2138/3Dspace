@@ -1,5 +1,3 @@
-import * as THREE from 'three'
-
 import Database from './Utils/Database.js'
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'

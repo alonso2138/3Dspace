@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 import Time from './Time.js';
 import SceneSetup from './SceneSetup.js';
 import ModelLoader from './ModelLoader.js';
@@ -14,12 +12,13 @@ import LoadColors from './interface/LoadColors.js';
 import Outline from './Model/Outline.js';
 import Stats from 'stats.js';
 import LoadMarcas from './Model/LoadMarcas.js';
+import Welcome from './interface/Welcome.js';
 
 let instance = null;
  
 export default class Experience {
     constructor(_canvas) {
-        // Singleton
+        // Singletony
         if (instance) {
             return instance;
         }
@@ -309,6 +308,11 @@ export default class Experience {
         this.bottomBar.init();
 
         this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
+
+        console.log(this.sceneSetup.mobilePov)
+
+        // Initialize welcome
+        this.welcome = new Welcome();
 
         // Load main Object
         this.modelLoader.loadModel(this.moto, undefined, 0,false);

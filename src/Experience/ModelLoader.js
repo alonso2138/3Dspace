@@ -1,5 +1,4 @@
 // ModelLoader.js
-import * as THREE from 'three'
 import Experience from './Main';
 
 export default class ModelLoader {
