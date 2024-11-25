@@ -1,7 +1,5 @@
 // ShadowCreator.js
 // ModelLoader.js
-import * as THREE from 'three'
-
 
 export default class ShadowCreator {
     constructor(scene) {

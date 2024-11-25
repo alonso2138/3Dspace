@@ -670,6 +670,7 @@ export default class RightBar {
             }
             .title {
                 margin-bottom: 0;
+                display:none;
             }
             .cost-box {
                 width: 50%;
@@ -681,10 +682,6 @@ export default class RightBar {
 
             .top-nav-wrapper{
                 height: 4rem;
-            }
-            
-            .title{
-                display:none;
             }
 
             #Total{
@@ -765,7 +762,7 @@ export default class RightBar {
 
     addToCart(custom,id){
         //Notification
-        document.getElementById('notification').style.opacity = 1;
+        document.getElementById('notification').style.opacity = 0;
 
         //Delete existing piece in cart
         const index = this.selectedPieces.findIndex(piece => piece.piezaEditando === this.experience.piezaEditando);
@@ -794,7 +791,7 @@ export default class RightBar {
         this.experience.infoTab.appearBox(custom,id);
 
         //Notification
-        if(this.selectedPieces.length>0) document.getElementById('notification').style.opacity = 1;
+        if(this.selectedPieces.length>0) document.getElementById('notification').style.opacity = 0;
 
         this.experience.updateCookie();
     }
