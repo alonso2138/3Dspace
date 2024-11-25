@@ -350,7 +350,7 @@ export default class RightBar {
 
 
         #notification{
-            opacity:1;
+            opacity:0;
 
             position: fixed;
             height: 1rem;
@@ -447,14 +447,14 @@ export default class RightBar {
             border:none;
             border-radius: 0.5rem;
             
-            background-color: var(--Button);
+            background-color: var(--TopnavButton);
 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
             transition: all 0.3s ease;
         }
         .cost-box button:hover {
-            background-color: var(--ButtonHover);
+            background-color: var(--TopnavButtonHover);
             color: var(--TextHighlight);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }

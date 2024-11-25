@@ -8,8 +8,9 @@ export default class Welcome {
         // Check for the welcome cookie
         const welcomeCookie = this.getCookie('welcome');
         if (welcomeCookie) {
-            this.startWelcome();
-            //this.endWelcome();
+            //this.startWelcome();
+            console.log("cookie")
+            this.endWelcome();
         } else {
             this.startWelcome();
         }
@@ -50,9 +51,9 @@ export default class Welcome {
         // Create welcome texts
         const texts = [
             "¡Bienvenido a Tunerr!",
-            "Toca la pantalla para mirar alrededor (emoji tocar)",
-            "Utiliza los botones laterales para moverte (emoji botón)",
-            "Personaliza tu casa con la barra inferior",
+            "Toca la pantalla para mirar alrededor 👆",
+            "Utiliza los botones laterales para moverte 🖲️",
+            "Personaliza tu casa con la barra inferior 🏡",
             "Pulsa para continuar"
         ];
 
@@ -73,10 +74,17 @@ export default class Welcome {
 
         // Show texts with delay
         texts.forEach((_, index) => {
-            if(index==4) this.overlay.style.cursor = 'pointer'
             setTimeout(() => {
+            console.log(index)
+
                 this.overlay.querySelector(`.welcome-text-${index + 1}`).style.opacity = 1;
-            }, (index + 1) * 3000);
+            }, (index + 1) * 2000);
+            if(index==4){
+                console.log("ahora")
+                setTimeout(() => {
+                    this.overlay.style.cursor = 'pointer'
+                }, 2500);
+            }
         });
 
         // Add click event to overlay

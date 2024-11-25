@@ -3,6 +3,7 @@ import Experience from './Main.js'
 import { gsap } from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import MobilePov from './interface/MobilePov.js';
+import { Euler } from 'three';
 
 export default class SceneSetup {
     constructor(canvas) {
@@ -17,8 +18,8 @@ export default class SceneSetup {
         this.canvas = canvas
 
         // Original camera pos
-        this.cameraOriginal = [0, 2.4, 0.1]
-        this.targetOriginal = [0, 2.3, 0]
+        this.cameraOriginal = [3, 11, 0]
+        this.targetOriginal = [3, 1, 0]
 
         this.setupCamera();
         this.setupRenderer();
@@ -33,8 +34,8 @@ export default class SceneSetup {
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enablePan = true; // Disable panning
         this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
-        this.controls.minDistance = 1.5;
-        this.controls.maxDistance = 4;
+        this.controls.minDistance = 0;
+        this.controls.maxDistance = 40;
         this.controls.enableDamping = true;
     }
 
@@ -49,7 +50,7 @@ export default class SceneSetup {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-        this.renderer.toneMapping = THREE.LinearToneMapping
+        this.renderer.toneMapping = THREE.LinearToneMapping;
         this.renderer.toneMappingExposure = 0.5;
         
         document.body.appendChild(this.renderer.domElement);
@@ -94,16 +95,16 @@ export default class SceneSetup {
     resetCamera(){
         // Pos as vector3
         gsap.to(this.camera.position, {
-            x: 0,
-            y: 2.6,
-            z: 0.1,
+            x: 3.8,
+            y: 1.3,
+            z: 1.4,
             duration: 1 // Adjust the duration as needed
         });
 
         // Pos as vector3
         gsap.to(this.controls.target, {
-            x: 0,
-            y: 2.5,
+            x: 3.4,
+            y: 1.2,
             z: 0,
             duration: 1 // Adjust the duration as needed
         });
@@ -111,14 +112,16 @@ export default class SceneSetup {
     
     addLights() {
         // Ambient Light
-        const ambientLight = new THREE.AmbientLight('#ffffff', 2);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 1);
         this.scene.add(ambientLight);
 
-        // Additional Lights
-        this.pointLight1 = new THREE.PointLight('#ffffff', 0.8, 50);
-        this.pointLight1.position.set(0, 0, 0);
-        this.scene.add(this.pointLight1);
+        const lights = [[-2.4,3.4,0.2],[3.3,2.8,-0.3],[2,2.9,2.9],[5,2.9,2.8]]
 
+        lights.forEach(lightPosition => {
+            const pointLight = new THREE.PointLight('#ffffff', 1, 10);
+            pointLight.position.set(lightPosition[0], lightPosition[1], lightPosition[2]);
+            this.scene.add(pointLight);
+        });
 
         // Environment map
         const environmentMap = this.resources.items.environmentMapTexture;

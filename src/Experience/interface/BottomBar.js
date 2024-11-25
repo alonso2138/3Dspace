@@ -50,6 +50,7 @@ export default class BottomBar {
     injectStylesComputer() {
         const styles = `
             .wrapper {
+                overflow: hidden;
                 width: 100%;
                 height: 25%;
                 display: flex;
@@ -60,6 +61,7 @@ export default class BottomBar {
                 justify-content:center;
                 align-content: center;
                 flex-wrap: nowrap;
+                
             }
 
             .parent-container {
@@ -71,28 +73,35 @@ export default class BottomBar {
                 align-items: center;
                 gap: 22px;
                 padding: 10px;
-                overflow: visible;
                 opacity: 1;
                 transition: opacity 0.3s ease; /* Smooth hover animation */
+                overflow: visible;
+
             }
 
             .parent-container.overflow {
+                overflow: scroll;
                 justify-content: flex-start !important;
             }
 
-            .parent-container::-webkit-scrollbar {
+            .parent-container.overflow::-webkit-scrollbar {
+                margin-top: 10px;
+                height: 10px;
+            }
+
+            .parent-container::-webkit-scrollbar-track {
+                margin-top: 10px;
                 height: 0;
             }
 
             .parent-container::-webkit-scrollbar-track {
-                background: var(--CustomHover);
+                background: var(--Custom);
                 border-radius: 15px;
             }
 
             .parent-container::-webkit-scrollbar-thumb {
-                background-color: var(--Button);
+                background-color: var(--CustomSelected);
                 border-radius: 15px;
-                border: 3px solid var(--CustomHover);
             }
 
             .parent-container::-webkit-scrollbar-button {

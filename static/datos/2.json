@@ -1,0 +1,44 @@
+{
+    "id": [0],
+    "sky": 3,
+    "tipo": "triumph",
+    "model": "Piso en avd Santander 12",
+    "url": "/models/a/1.glb",
+    "position": [0, 0, 0],
+    "scale": [1, 1, 1],
+    "povs": [[0, 2.5, 0],[0,2,2.7],[0,0.5,-4.3]],
+    "customs": [
+        {
+            "name": "Sofá",
+            "img": "images/0/default.png",
+            "id": [1, 2],
+            "title": ["Moderno Doble", "Clásico doble"],
+            "url": ["models/a/12.glb", "models/a/13.glb"],
+            "camera_position": [2.2,3.7,-3.3],
+            "camera_target": [-0.5, 0.5, -1.3],
+            "position": [[0, 0, 0], [0, 0, 0]],
+            "scale": [[1, 1, 1], [1, 1, 1]],
+            "selected": 1,
+            "image": ["images/0/arrow.png", "images/0/SCproject.png"],
+            "price": [256.34, 464.10],
+            "price_id": ["price_1QIrUsH6YrdtkYECjoeGP1gS", "price_1QIs2TH6YrdtkYEC1Ho9CxZ6"]
+            
+        },
+        {
+            "name": "Esquina",
+            "img": "images/0/default.png",
+            "id": [1, 2],
+            "title": ["Puff otomano", "Puff"],
+            "url": ["models/a/21.glb", "models/a/22.glb"],
+            "camera_position": [1.2,3.7,-0.9],
+            "camera_target": [2.5, 0.5, -4],
+            "position": [[0, -0.1, 0], [0, -0.1, 0]],
+            "scale": [[1, 1, 1], [1, 1, 1]],
+            "selected": 1,
+            "image": ["images/default.png", "images/0/arrow.png"],
+            "price": [145.34, 38.44],
+            "price_id": ["1", "price_1QIrUsH6YrdtkYECjoeGP1gS"]
+            
+        }
+    ]
+}

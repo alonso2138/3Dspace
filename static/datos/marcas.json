@@ -3,39 +3,44 @@
     [
         {
             "name": "",
-            "photo_url": "/images/logos/sandoval-1.png",
+            "photo_url": "/images/logos/yer.png",
             "models": [
                 {
-                    "name": "Piso en venta en avd Santander 12",
-                    "photo_url": "/images/1.jpeg",
+                    "name": "Piso de lujo en el corazón de alicante",
+                    "photo_url": "/images/1.jpg",
                     "data_url": "/datos/1.json"
                 },
                 {
-                    "name": "Doctor Ferran 19",
-                    "photo_url": "/images/2.jpeg",
-                    "data_url": "/datos/2.json"
+                    "name": "Villa serenity",
+                    "photo_url": "/images/2.jpg",
+                    "data_url": "/datos/1.json"
+                },
+                {
+                    "name": "Señoral chalet en las águilas",
+                    "photo_url": "/images/3.jpg",
+                    "data_url": "/datos/1.json"
                 }
             ]
         }
     ],
     "paleta": {
-        "ParentHover": "#ddd1b6",
+        "ParentHover": "#a58a56",
         "ParentSelected": "#e5dcc8",
-        "Parent": "#ede7d9",
-        "CustomHover": "#f2e7e4",
-        "CustomSelected": "#edddd9",
-        "Custom": "#f9f4f3",
+        "Parent": "#f2f2f2",
+        "CustomHover": "#6b9696",
+        "CustomSelected": "#adc5c5",
+        "Custom": "#dee7e7",
         "ButtonHover": "#d5a021",
-        "ButtonSelected": "#d5a021",
+        "ButtonSelected": "#5b8b8b",
         "Button": "#d5a021",
         "TextHighlight": "#",
         "Text": "#023047",
-        "Topnav": "#ede7d9",
-        "TopnavButton": "#d5a021",
-        "TopnavButtonHover": "#d5a021",
-        "InfoBoxBackground": "#ede7d9",
-        "InfoBoxButton": "#d5a021",
-        "InfoBoxButtonHover": "#ddb34d ",
-        "InfoBoxButtonSelected": "#EED9A6"
+        "Topnav": "#f2f2f2",
+        "TopnavButton": "#5b8b8b",
+        "TopnavButtonHover": "#a58a56",
+        "InfoBoxBackground": "#f2f2f2",
+        "InfoBoxButton": "#5b8b8b",
+        "InfoBoxButtonHover": "#5b8b8b ",
+        "InfoBoxButtonSelected": "#dee7e7"
     }
 }
