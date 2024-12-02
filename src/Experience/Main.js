@@ -18,7 +18,7 @@ let instance = null;
  
 export default class Experience {
     constructor(_canvas) {
-        // Singletony
+        // Singleton
         if (instance) {
             return instance;
         }
@@ -32,9 +32,9 @@ export default class Experience {
         this.canvas = _canvas;
 
         // Initialize this.stats
-        this.stats = new Stats();
-        this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.body.appendChild(this.stats.dom);
+        //this.stats = new Stats();
+        //this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        //document.body.appendChild(this.stats.dom);
 
         // Initialize LoadMarcas
         this.init();
@@ -111,6 +111,8 @@ export default class Experience {
             const response = await fetch(path);
             const jsonData = await response.json();
 
+            this.moto = jsonData;
+/*
             // Instantiate this with data from JSON
             this.moto = {
                 id: jsonData.id,
@@ -122,7 +124,7 @@ export default class Experience {
                 scale: jsonData.scale,
                 povs: jsonData.povs,
                 customs: jsonData.customs
-            };
+            };*/
 
         } catch (error) {
             console.error('Error loading moto data:', error);
@@ -182,7 +184,7 @@ export default class Experience {
     // Callback function for parent square click
     onParentSquareClick(id) {
         //Check if there are already customs shown
-        if( this.piezaEditando==undefined){        
+        /*if( this.piezaEditando==undefined){        
             this.piezaEditando=id;
             setTimeout(() => {
                 this.startEditing();
@@ -191,7 +193,7 @@ export default class Experience {
             }, this.bottomBar.animationTimeout);
         
             //Check if we want to hide customs or to change customs
-        }else {
+        }else {*/
             if( this.piezaEditando==id){
 
                 this.stopEditing(true);
@@ -207,16 +209,17 @@ export default class Experience {
                     this.startEditing();
                 }, this.bottomBar.animationTimeout);
             }
-        }
+        //}
     }
 
     // Callback function for square click
     onSquareClick(id) {
+        const piezaEditando = this.piezaEditando;
         //Antes de esta función se ejecuta infoTabAppear(id)
 
         //Estilos de seleccionar cuadrado
         // Quitar estilos a todos los squares (id pieza seleccionada, i pieza iterada)
-        const piezaEditando = this.piezaEditando;
+        /*
         function cuadrado(x){
             return document.getElementById('CustomSquare'+(x+1)+'Pieza'+piezaEditando);
         }
@@ -233,10 +236,19 @@ export default class Experience {
         }
 
         //Ahora se llama el model loader
+        */
+
+        if(document.querySelector('.selected')){
+            document.querySelector('.image.selected').classList.remove('selected');
+        }
+        console.log(document.querySelector('.image'+id))
+        document.querySelector('.image'+id).classList.add('selected');
+
         this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
         if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
-
         if(this.rightBar) this.rightBar.updateList( this.piezaEditando, this.moto.customs[ this.piezaEditando].title[id], this.moto.customs[ this.piezaEditando].price[id]);
+
+        this.moto.customs[piezaEditando].selected=id;
     }
 
     infoTabAppear(id){
@@ -244,6 +256,7 @@ export default class Experience {
     }
 
     stopEditing(cameraReset){
+        if(this.sceneSetup)this.sceneSetup.controls.enabled = true;
         if(this.piezaEditando==undefined) return;
         const id=this.piezaEditando
         this.bottomBar.deleteBottomBar();
@@ -251,17 +264,24 @@ export default class Experience {
         if(cameraReset) this.sceneSetup.resetCamera();
         if(this.infoTab) this.infoTab.disappearBox();
         this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
-        document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
-        console.log(this.piezaEditando)
-        console.log(document.getElementById('ParentSquare'+this.piezaEditando))
+        //if(document.getElementById('ParentSquare'+this.piezaEditando)) document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
+        if(document.querySelector('.point')){
+            document.querySelector('.point').style.opacity = '1';
+            document.querySelector('.point').style.pointerEvents = 'all';
+        }
     }
 
     startEditing(){
+        if(this.sceneSetup)this.sceneSetup.controls.enabled = false;
         const id = this.piezaEditando;
+        if(document.querySelector('.point')){
+            document.querySelector('.point').style.opacity = '0';
+            document.querySelector('.point').style.pointerEvents = 'none';
+        }
         this.sceneSetup.mobilePov.removeSelection();
         this.bottomBar.generateBottomBar(this.moto.customs,id);
         this.sceneSetup.moveCamera(this.moto.customs[id].camera_position, this.moto.customs[id].camera_target);
-        document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
+        //if(document.getElementById('ParentSquare'+id)) document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
     }
 
     onSquareUnHover(){
@@ -302,12 +322,12 @@ export default class Experience {
             this.updateCookie();
         }
 
-        this.infoTab = new InfoTab();
+        this.infoTab = new InfoTab(this.onSquareClick.bind(this));
 
         this.bottomBar = new BottomBar('square-container', this.onSquareClick.bind(this), this.onParentSquareClick.bind(this), this.infoTabAppear.bind(this), this.onSquareUnHover.bind(this));
         this.bottomBar.init();
 
-        this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
+        //this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
 
         console.log(document.querySelector('.puntosWrapper'))
 
@@ -331,6 +351,10 @@ export default class Experience {
 
         // Initialize welcome
         this.welcome = new Welcome();
+
+        // Animate start of scene
+        this.sceneSetup.animateExposure();
+
     }
 
     resizeEvent(){
@@ -343,12 +367,16 @@ export default class Experience {
     {
         this.contador++;
 
-        this.stats.begin()
+        //this.stats.begin()
         this.sceneSetup.render();
+        this.bottomBar.update();
 
         if(this.piezaEditando!=undefined){
-            this.outline.composer.render();
+            if(this.outline) this.outline.composer.render();
         }
-        this.stats.end()
+
+        //console.log(this.sceneSetup.camera.position.x.toFixed(1)+","+this.sceneSetup.camera.position.y.toFixed(1)+','+this.sceneSetup.camera.position.z.toFixed(1))
+
+        //this.stats.end()
     }
 }

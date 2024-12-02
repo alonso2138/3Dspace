@@ -21,6 +21,8 @@ export default class BottomBar {
         this.animationTimeout=100;
         this.isAnimating = false; // Flag to track animation state
 
+        this.points = [];
+
         this.styleSheet = null;
         this.styleSheetMobile = null;
     }
@@ -46,9 +48,87 @@ export default class BottomBar {
 
     }
 
+    generateCustom(object, id){
+        const point = document.createElement('div');
+        point.classList.add('point','point-'+id,'visible');
+        point.id = 'point-'+this.experience.piezaEditando;
+
+        const label = document.createElement('div');
+        label.classList.add('label');
+        label.addEventListener('click', () => {
+            if (this.onParentSquareClick) this.onParentSquareClick(id);
+        });
+
+        point.appendChild(label);
+        document.body.appendChild(point);
+
+        this.points.push({
+            position: new THREE.Vector3(-5, 1, 3),
+            element: document.querySelector('.point-'+id)
+        });
+    }
+
     // Bottom bar
     injectStylesComputer() {
         const styles = `
+
+            /* Keyframes for the pulsating effect */
+            @keyframes pulseEffect {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.5); /* Makes the circle grow */
+                    opacity: 0.5; /* Reduces opacity during growth */
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 0.5; /* Fades out completely */
+                }
+            }
+
+            .point{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+
+            }
+
+            .point .label{
+                position: absolute;
+                top: -20px;
+                left: -20px;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #00000077;
+                border: 1px solid #ffffff77;
+                color: #ffffff;
+                text-align: center;
+                line-height: 40px;
+                font-weight: 100;
+                font-size: 14px;
+                cursor: pointer;
+                transform: scale(0, 0);
+                transition: transform 0.3s;
+                transform: scale(0, 0);
+                transition: transform 0.3s;
+
+                background-color: white; /* Match the central circle's color */
+                animation: pulseEffect 2s infinite; /* Animation duration and repeat */
+            }
+            
+            .point.visible .label{
+                transform: scale(1, 1);
+            }
+
+            .point:hover .text{
+                opacity: 1;
+                pointer-events: all;
+            }
+
+
             .wrapper {
                 overflow: hidden;
                 width: 100%;
@@ -329,7 +409,7 @@ export default class BottomBar {
         document.body.appendChild(wrapper);
 
     }
-
+/*
     generateCustom(object, id) {
         const square = document.createElement('div');
         square.textContent = object.name;
@@ -342,7 +422,7 @@ export default class BottomBar {
         });
 
         document.getElementById("ParentContainer").appendChild(square);
-    }
+    }*/
 
     destroyBottomBar() {
         // Delete wrapper element
@@ -353,6 +433,7 @@ export default class BottomBar {
     }
 
     generateBottomBar(customs, i) {
+        /*
         if (this.isAnimating) return; // Ignore if an animation is in progress
 
         for (let y = 0; y < customs[i].id.length; y++) {
@@ -384,8 +465,9 @@ export default class BottomBar {
             document.getElementById("CustomContainer").classList.add('show');
         }
 
-        this.checkOverflow();
+        this.checkOverflow();*/
         this.experience.infoTab.appearBox(customs[i],this.experience.moto.customs[i].selected);
+        
     }
 
     deleteBottomBar() {
@@ -415,5 +497,16 @@ export default class BottomBar {
     init() {
         this.injectStylesComputer();
         this.generateHTML();
+    }
+
+    update(){
+        for(const point of this.points){
+            const screenPosition = point.position.clone()
+            screenPosition.project(this.experience.sceneSetup.camera)
+    
+            const translateX = screenPosition.x * window.screen.width * 0.5
+            const translateY = - screenPosition.y * window.screen.height * 0.5
+            point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
+        }
     }
 }

@@ -18,14 +18,19 @@ export default class Welcome {
 
     startWelcome() {
         // Hide interface
-        document.querySelector('.top-nav-wrapper').style.opacity = 0;
-        document.querySelector('.top-nav-wrapper').style.pointerEvents = 'none';
-        document.querySelector('.wrapper').style.opacity = 0;
-        document.querySelector('.wrapper').style.pointerEvents = 'none';
-        document.querySelector('.puntosWrapper').style.opacity = 0;
-        document.querySelector('.puntosWrapper').style.pointerEvents = 'none';
+        console.log("start")
+        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.opacity = 0;
+        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.pointerEvents = 'none';
+        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.opacity = 0;
+        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.pointerEvents = 'none';
+        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.opacity = 0;
+        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.pointerEvents = 'none';
+        if(document.querySelector('.webgl')) document.querySelector('.webgl').style.opacity = 0;
+        if(document.querySelector('.webgl')) document.querySelector('.webgl').style.pointerEvents = 'none';
 
         if(document.querySelector('.welcome-overlay')) document.querySelector('.welcome-overlay').parentElement.removeChild(document.querySelector('.welcome-overlay'))
+            
+            
 
         // Create overlay
         this.overlay = document.createElement('div');
@@ -100,6 +105,7 @@ export default class Welcome {
     }
 
     endWelcome() {
+        console.log("final")
         if (this.overlay) {
             this.overlay.style.opacity = 0;
             setTimeout(() => {
@@ -109,12 +115,12 @@ export default class Welcome {
                 this.overlay = null;
 
                 // Show interface
-                document.querySelector('.top-nav-wrapper').style.opacity = 1;
-                document.querySelector('.top-nav-wrapper').style.pointerEvents = 'auto';
-                document.querySelector('.wrapper').style.opacity = 1;
-                document.querySelector('.wrapper').style.pointerEvents = 'auto';
-                document.querySelector('.puntosWrapper').style.opacity = 1;
-                document.querySelector('.puntosWrapper').style.pointerEvents = 'auto';
+                if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.opacity = 1;
+                if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.pointerEvents = 'auto';
+                if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.opacity = 1;
+                if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.pointerEvents = 'auto';
+                if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.opacity = 1;
+                if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.pointerEvents = 'auto';
 
                 // Set welcome cookie
                 this.setCookie('welcome', 'true', 1);

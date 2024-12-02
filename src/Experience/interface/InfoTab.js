@@ -1,10 +1,12 @@
 import Experience from '../Main.js';
 
 export default class InfoTab {
-    constructor() {
+    constructor(onSquareClick) {
         this.experience = new Experience();
         this.mouseOverInfoTab = false;
         this.selectedPiece = null;
+
+        this.onSquareClick = onSquareClick;
 
         // Generate the HTML and inject styles
         this.generateHTML();
@@ -14,14 +16,51 @@ export default class InfoTab {
     appearBox(custom,id) {
         const infoBox = document.getElementById('info-box');
 
-        infoBox.style.opacity = 0.9;
+        infoBox.style.opacity = 1;
         infoBox.style.visibility = 'visible';
         infoBox.style.pointerEvents = 'all';
 
         //infoBox.querySelector('.image').src = custom.image[id];
-        infoBox.querySelector('.description').textContent = custom.title[id];
-        infoBox.querySelector('.price').textContent = `Precio: ${custom.price[id]} €`;
+        //infoBox.querySelector('.description').textContent = custom.title[id];
+        //if(infoBox.querySelector('.price')) infoBox.querySelector('.price').textContent = `Precio: ${custom.price[id]} €`;
+        infoBox.querySelector('.InfoBoxTitle').textContent = "Elige el material para personalizar el  "+custom.name+":";
 
+
+        if(infoBox.querySelector('.InfoBoxImages')) infoBox.querySelector('.InfoBoxImages').innerHTML = '';
+        for(let i = 0; i < custom.id.length; i++){
+            const wrapper = document.createElement('div');
+            wrapper.className = 'InfoBoxWrapper';
+
+            const image = document.createElement('div');
+            image.addEventListener('click', () => {
+                console.log("seleccionado es "+id,"click en "+i)
+                if(id!=i){
+                    if(document.querySelector('.image.selected')) document.querySelector('.image.selected').classList.remove('selected');
+                    this.experience.rightBar.cartButton(custom, i);
+                    image.classList.add('selected');
+                }
+                if (this.onSquareClick) this.onSquareClick(i);
+                //this.appearBox(custom, i);
+            });
+
+            image.className = 'image';
+            image.classList.add('image'+i);
+
+            if(id == i){
+                image.classList.add('selected');
+            }
+            image.style.backgroundImage = "url('"+custom.image[i]+"')";
+
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.innerText = custom.title[i];
+
+            wrapper.appendChild(image);
+            wrapper.appendChild(label);
+            infoBox.querySelector('.InfoBoxImages').appendChild(wrapper);
+            
+        }
+/*
         let cartButton = document.getElementById('cart-button');
 
         // Remove all existing click event listeners
@@ -65,7 +104,7 @@ export default class InfoTab {
         // Define and add the new event handler
         newCartButton.addEventListener('click', () => {
             this.experience.rightBar.cartButton(custom, id);
-        });
+        });*/
         
     }
 
@@ -88,11 +127,13 @@ export default class InfoTab {
         // <img class="image" src="" alt="Piece Image" />
         
         infoBox.innerHTML = `
+            <div class="InfoBoxTitle"></div>
             <button class="close-btn">&times;</button>
+            <div class="InfoBoxImages"></div>
             <div class="description"></div>
-            <div class="price"></div>
-            <div class="add-cart" id="cart-button"></div>
         `;
+
+        // <div class="add-cart" id="cart-button"></div>
 
         document.body.appendChild(infoBox);
 
@@ -106,65 +147,124 @@ export default class InfoTab {
 
         // Add event listener to the close button
         infoBox.querySelector('.close-btn').addEventListener('click', () => {
-            this.disappearBox();
+            this.experience.stopEditing(1);
+
         });
     }
 
     injectStyles() {
         const styles = `
 .info-box {
-    position: fixed;
-    bottom: 27%;
-    right: 1rem;
-    width: 14rem; /* Adjusted for better responsiveness */
-    height: auto;
+    display: flex;
+    jsutify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
     background-color: var(--InfoBoxBackground); /* Replaced with variable */
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    top: 0;
     opacity: 0;
     pointer-events:none;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 100;
+
+    font-family: "Inter", sans-serif !important;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
-.info-box .image {
-    width: 100%;
-    height: 60%;
-    object-fit: contain;
-    margin-bottom: 1rem; /* Adjusted for better spacing on smaller screens */
+.info-box .InfoBoxTitle {
+    margin-left: 2rem;
+    margin-top: 1rem;
+    width: auto;
+    font-weight: 200;
+    font-size: 160%;
+    font-style: normal;
+    color: var(--Text); /* Replaced with variable */
+    text-transform: uppercase;
 }
+
 
 .info-box .description {
-    margin-bottom: 0.5rem;
+    font-weight: 200;
+    font-size: 1.2rem;
 }
 
 .info-box .price {
     font-weight: bold;
 }
 
+.InfoBoxImages {
+    margin-top: 3rem;
+    width: 90%;
+    height: 50%;
+    display: flex;
+    gap: 3rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--InfoBoxScrollbar) var(--InfoBoxImagesBackground); /* Replaced with variable */
+}
+
+.info-box .InfoBoxWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.info-box .image {
+    max-height: 500px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    box-shadow:inset 0px 0px 0px 0px #000000;
+    transition: all 0.5s ease;
+}
+
+.info-box .image.selected {
+    box-shadow:inset 0px 0px 15px 3px #000000;
+}
+
+.info-box .label {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 190;
+    font-size: 1.2rem;
+}
+
 .close-btn {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 1rem;
+    right: 1rem;
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     cursor: pointer;
 }
 
 .add-cart {
+position: inherit;
     display: flex;
     justify-content: center;
     height: 3rem;
+    text-transform: uppercase;
     align-items: center;
     padding: 0 2rem;
     text-align: center;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     box-shadow: 2.3px 4.6px 4.6px hsl(0deg 0% 0% / 0.43);
-    background-color: var(--InfoBoxButton); /* Replaced with variable */
-    color: var(--Text); /* Replaced with variable */
+    background-color: var(--InfoBoxButton);
+    color: var(--Text);
     cursor: pointer;
+    bottom: 10%;
+    width: 70%;
     margin: 1rem auto;
     transition: all 0.3s ease;
 }
@@ -193,14 +293,22 @@ export default class InfoTab {
     pointer-events: none;
 }
 
+@media (min-width: 1200px) {
+    .info-box {
+        max-width: 450px;
+    }
+}
+
+
+@media (max-width: 1199px) {
+    .info-box {
+        max-width: 450px;
+    }
+}
+
 @media (max-width: 800px) {
     .info-box {
-        top: 8rem;
-        bottom: unset;
-        right: 5%;
-        width: auto;
-        height: auto;
-        position: absolute;
+        max-width: 100%;
     }
 
     .add-cart {

@@ -44,7 +44,7 @@ export default class MobilePov{
                     }
                 }
 
-                this.experience.sceneSetup.moveCamera(null, this.experience.moto.povs[i]);
+                this.experience.sceneSetup.moveCamera(this.experience.moto.povs[i],this.experience.moto.lookAt[i]);
             };
             wrapper.appendChild(punto)
 

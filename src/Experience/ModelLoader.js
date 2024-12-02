@@ -40,6 +40,11 @@ export default class ModelLoader {
                     node.castShadow = true;
                     node.receiveShadow = true;
                 }
+
+                // Apply THREE.SRGBColorSpace to the material's map if it exists
+                if (node.material && node.material.map) {
+                    node.material.map.encoding = THREE.SRGBColorSpace;
+                }
             });
 
             // REMOVE OLD MODEL AND ITS RESIDUE IF IT EXISTS

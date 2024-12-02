@@ -1,9 +1,16 @@
 import EventEmitter from '../EventEmitter.js';
 import Experience from '../Main.js';
 
+let styles = 0;
+
 export default class SelectObject extends EventEmitter {
     constructor() {
         super();
+        if(!styles){
+            this.injectStyles();
+            styles++;
+        }
+
         this.experience = new Experience();
 
         this.brands = this.experience.loadMarcas.marcas;
@@ -60,7 +67,7 @@ export default class SelectObject extends EventEmitter {
                 font-size: 16px;
                 color: #333;
             }
-            .title {
+            .titulo {
                 font-size: 24px;
                 font-family: 'Futura', sans-serif;
                 color: #333;
@@ -78,45 +85,6 @@ export default class SelectObject extends EventEmitter {
             .blurred {
                 filter: blur(5px);
             }
-            .loading-screen {
-                background: linear-gradient(135deg, #ececec, #ffffff);
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 300px;
-                height: 200px;
-                transform: translate(-50%, -50%);
-
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.5em;
-                transition: opacity 1s ease, filter 1s ease;
-            }
-
-            .spinner {
-                border: 4px solid rgba(0, 0, 0, 0.1);
-                border-top: 4px solid #3498db;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                animation: spin 1s linear infinite;
-                margin-bottom: 20px;
-            }
-
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-
-            .loading-text {
-                color: #333;
-                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            }
         `;
 
         const styleSheet = document.createElement("style");
@@ -128,15 +96,16 @@ export default class SelectObject extends EventEmitter {
     generateBrandHTML() {
         console.log(this.brands)
 
+        if(document.querySelector("container")) document.querySelector("container").parentElement.removeChild(document.querySelector("container"))
         document.body.innerHTML = '';
 
         const container = document.createElement('div');
         container.className = 'container';
 
-        const title = document.createElement('h1');
-        title.className = 'title';
-        title.textContent = '';
-        container.appendChild(title);
+        const titulo = document.createElement('h1');
+        titulo.className = 'titulo';
+        titulo.textContent = '';
+        container.appendChild(titulo);
 
         const brandContainer = document.createElement('div');
         brandContainer.className = 'brand-container';
@@ -150,11 +119,11 @@ export default class SelectObject extends EventEmitter {
             img.src = brand.photo_url;
             img.alt = brand.name;
 
-            const brandTitle = document.createElement('h3');
-            brandTitle.textContent = brand.name;
+            const brandtitulo = document.createElement('h3');
+            brandtitulo.textContent = brand.name;
 
             brandCard.appendChild(img);
-            brandCard.appendChild(brandTitle);
+            brandCard.appendChild(brandtitulo);
             brandContainer.appendChild(brandCard);
         });
 
@@ -183,10 +152,10 @@ export default class SelectObject extends EventEmitter {
             });
             container.appendChild(backButton);
 
-            const title = document.createElement('h1');
-            title.className = 'title';
-            title.textContent = 'Selecciona el inmueble:';
-            container.appendChild(title);
+            const titulo = document.createElement('h1');
+            titulo.className = 'titulo';
+            titulo.textContent = 'Selecciona el inmueble:';
+            container.appendChild(titulo);
 
             const modelContainer = document.createElement('div');
             modelContainer.className = 'model-container';
@@ -200,11 +169,11 @@ export default class SelectObject extends EventEmitter {
                 img.src = model.photo_url;
                 img.alt = model.name;
 
-                const modelTitle = document.createElement('h3');
-                modelTitle.textContent = model.name;
+                const modeltitulo = document.createElement('h3');
+                modeltitulo.textContent = model.name;
 
                 modelCard.appendChild(img);
-                modelCard.appendChild(modelTitle);
+                modelCard.appendChild(modeltitulo);
                 modelContainer.appendChild(modelCard);
             });
 
@@ -220,17 +189,17 @@ export default class SelectObject extends EventEmitter {
         // Apply blur effect to model cards
         const modelCards = document.querySelectorAll('.model-card');
         modelCards.forEach(card => card.classList.add('blurred'));
-        const title = document.querySelector('.title');
+        const titulo = document.querySelector('.titulo');
 
 
         // Remove model cards after the blur animation
         setTimeout(() => {
             modelCards.forEach(card => card.remove());
-            title.textContent = '';
+            titulo.textContent = '';
 
             // Match the transition duration
             setTimeout(() => {
-                title.textContent = 'Ups... ¡Algo salió mal!';
+                titulo.textContent = 'Ups... ¡Algo salió mal!';
 
             }, 500);
         }, 500);
@@ -245,7 +214,6 @@ export default class SelectObject extends EventEmitter {
     }
 
     async init() {
-        this.injectStyles();
         this.generateBrandHTML();
     }
 }

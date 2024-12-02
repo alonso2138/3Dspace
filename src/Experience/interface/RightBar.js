@@ -123,7 +123,7 @@ export default class RightBar {
 
         // Create back button
         const backButton = document.createElement('button');
-        backButton.className = 'back-button1';
+        backButton.className = 'back-button';
         backButton.innerHTML = '←';
         backButton.addEventListener('click', () => {
             this.experience.restartExperience();
@@ -219,6 +219,14 @@ export default class RightBar {
     }
 
     generateHTML() {
+        // Create back button
+        const backButton1 = document.createElement('button');
+        backButton1.className = 'back-button1';
+        backButton1.innerHTML = '←';
+        backButton1.addEventListener('click', () => {
+            this.experience.restartExperience();
+        });
+        document.body.appendChild(backButton1);
 
         //Confirmation Box 
         // Create the overlay
@@ -365,6 +373,9 @@ export default class RightBar {
         }
 
         .top-nav-wrapper {
+            pointer-events: none !important;
+            visibility: hidden !important;
+
             position: fixed;
             z-index: 2;
             top: 5%;
@@ -467,6 +478,30 @@ export default class RightBar {
         }
 
         .back-button1 {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            width: 4rem;
+            height: 3rem;
+            text-align: center;
+            border-radius: 4rem;
+            display: flex;
+            line-height: 2.7rem;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+
+        .back-button1:hover{
+            transform: scale(1.1);
+        }
+
+        .back-button{
             margin-left: 1rem;
             font-size: 2rem;
             cursor: pointer;
@@ -478,9 +513,10 @@ export default class RightBar {
             transition: all 0.3s ease;
         }
 
-        .back-button1:hover{
+        .back-button:hover{
             transform: scale(1.1);
         }
+
 
 
         .items-right{
@@ -774,7 +810,8 @@ export default class RightBar {
         
         this.updateList();
         this.experience.moto.customs[this.experience.piezaEditando].selected = id;
-        this.experience.infoTab.appearBox(custom,id);
+        console.log("El seleccionado es "+this.experience.moto.customs[this.experience.piezaEditando].selected)
+        //this.experience.infoTab.appearBox(custom,id);
 
         this.experience.updateCookie();
     }
@@ -788,7 +825,7 @@ export default class RightBar {
 
         this.experience.moto.customs[this.experience.piezaEditando].selected = 0;
         this.updateList();
-        this.experience.infoTab.appearBox(custom,id);
+        //this.experience.infoTab.appearBox(custom,id);
 
         //Notification
         if(this.selectedPieces.length>0) document.getElementById('notification').style.opacity = 0;
@@ -820,27 +857,31 @@ export default class RightBar {
             });
 
         }
-
-        if(id === custom.selected){
+        /*if(id === custom.selected){
+            this.removeFromCart(custom,id)
+            this.experience.modelLoader.loadModel(custom,this.experience.piezaEditando,custom.selected)
             messageBox(`Quieres quitar ${custom.title[id]}?`, ()=>{
                 this.removeFromCart(custom,id)
                 this.experience.modelLoader.loadModel(custom,this.experience.piezaEditando,custom.selected)
             });
 
-        }else if(custom.selected!=undefined){
-            messageBox(`Quieres reemplazar el ${custom.title[custom.selected]} por ${custom.title[id]}?`, ()=>{
+        }else*/ 
+        if(custom.selected!=undefined){
+            this.addToCart(custom,id)
+
+            /*messageBox(`Quieres reemplazar el ${custom.title[custom.selected]} por ${custom.title[id]}?`, ()=>{
                 this.removeFromCart(custom,custom.selected)
                 this.addToCart(custom,id)
                 
-            });
+            });*/
 
         }else{
-            messageBox(`Quieres añadir ${custom.title[id]}?`, ()=>{
+            this.addToCart(custom,id)
+            /*messageBox(`Quieres añadir ${custom.title[id]}?`, ()=>{
                 this.addToCart(custom,id)
                 
-            });
+            });*/
         }
-
 
         const overlay = document.getElementById('cart-overlay');
         const totalElement1 = overlay.querySelector('.total');

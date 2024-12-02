@@ -19,9 +19,9 @@ export default class Outline {
         this.composer.addPass( this.outlinePass);
 
         // Set the outline pass properties
-        this.outlinePass.visibleEdgeColor.set('#d5a021'); // Orange color
-        this.outlinePass.hiddenEdgeColor.set('#d5a021');
-        this.outlinePass.edgeStrength = 4.0; // Adjust this value to make the outline thicker
+        this.outlinePass.visibleEdgeColor.set('#ffffff'); // Orange color
+        this.outlinePass.hiddenEdgeColor.set('#DCDCDC');
+        this.outlinePass.edgeStrength = 1.0; // Adjust this value to make the outline thicker
         this.outlinePass.edgeGlow = 1.0; // Adjust this value for the glow effect
         this.outlinePass.edgeThickness = 0.5; // Adjust this value for edge detection thickness
         this.outlinePass.pulsePeriod = 0; // Adjust this value for pulsing effect (0 for no pulse)

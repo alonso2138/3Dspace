@@ -8,17 +8,7 @@
                 {
                     "name": "Piso de lujo en el corazón de alicante",
                     "photo_url": "/images/1.jpg",
-                    "data_url": "/datos/1.json"
-                },
-                {
-                    "name": "Villa serenity",
-                    "photo_url": "/images/2.jpg",
-                    "data_url": "/datos/1.json"
-                },
-                {
-                    "name": "Señoral chalet en las águilas",
-                    "photo_url": "/images/3.jpg",
-                    "data_url": "/datos/1.json"
+                    "data_url": "/datos/3.json"
                 }
             ]
         }

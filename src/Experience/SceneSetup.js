@@ -3,7 +3,7 @@ import Experience from './Main.js'
 import { gsap } from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import MobilePov from './interface/MobilePov.js';
-import { Euler } from 'three';
+import InteractionDetector from './interface/InteractionDetector.js';
 
 export default class SceneSetup {
     constructor(canvas) {
@@ -18,8 +18,11 @@ export default class SceneSetup {
         this.canvas = canvas
 
         // Original camera pos
-        this.cameraOriginal = [3, 11, 0]
-        this.targetOriginal = [3, 1, 0]
+        this.cameraOriginal = this.experience.moto.povs[0];
+        this.targetOriginal = this.experience.moto.lookAt[0];
+
+        // Usage
+        this.interactionDetector = new InteractionDetector();
 
         this.setupCamera();
         this.setupRenderer();
@@ -27,16 +30,25 @@ export default class SceneSetup {
     }
 
     setupCamera() {
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
         this.camera.position.set(this.cameraOriginal[0], this.cameraOriginal[1], this.cameraOriginal[2]); // Posición de la cámara para ver el objeto
 
         // this.Controls for rotating the scene
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enablePan = true; // Disable panning
         this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
-        this.controls.minDistance = 0;
-        this.controls.maxDistance = 40;
+        this.controls.dampingFactor = 0.01; // friction
+        this.controls.rotateSpeed = 0.2; // mouse sensitivity
         this.controls.enableDamping = true;
+
+        this.controls.minDistance = 4;
+        this.controls.maxDistance = 16;
+
+        this.controls.maxAzimuthAngle = 0.65;
+        this.controls.minAzimuthAngle = -0.55;
+        
+        this.controls.maxPolarAngle = 1.7;
+        this.controls.minPolarAngle = 1.14;
     }
 
     setupRenderer() {     
@@ -51,13 +63,25 @@ export default class SceneSetup {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         this.renderer.toneMapping = THREE.LinearToneMapping;
-        this.renderer.toneMappingExposure = 0.5;
+        this.renderer.toneMappingExposure = 0.1;
         
         document.body.appendChild(this.renderer.domElement);
 
     }
 
+    animateExposure(){
+        setTimeout(() => {
+            gsap.to(this.renderer, {
+                toneMappingExposure: 0.9,
+                duration: 3,
+                ease: "elastic.inOut" // You can choose any easing function you prefer
+            });
+        }, 200);
+
+    }
+
     moveCamera(cam,target){
+        console.log(cam,target)
         if(cam){
             // Pos as vector3
             gsap.to(this.camera.position, {
@@ -93,21 +117,7 @@ export default class SceneSetup {
     }
 
     resetCamera(){
-        // Pos as vector3
-        gsap.to(this.camera.position, {
-            x: 3.8,
-            y: 1.3,
-            z: 1.4,
-            duration: 1 // Adjust the duration as needed
-        });
-
-        // Pos as vector3
-        gsap.to(this.controls.target, {
-            x: 3.4,
-            y: 1.2,
-            z: 0,
-            duration: 1 // Adjust the duration as needed
-        });
+        this.moveCamera(this.cameraOriginal,this.targetOriginal);
     }
     
     addLights() {
@@ -115,7 +125,8 @@ export default class SceneSetup {
         const ambientLight = new THREE.AmbientLight('#ffffff', 1);
         this.scene.add(ambientLight);
 
-        const lights = [[-2.4,3.4,0.2],[3.3,2.8,-0.3],[2,2.9,2.9],[5,2.9,2.8]]
+        //const lights = [[-2.4,3.4,0.2],[3.3,2.8,-0.3],[2,2.9,2.9],[5,2.9,2.8]]
+        const lights = []
 
         lights.forEach(lightPosition => {
             const pointLight = new THREE.PointLight('#ffffff', 1, 10);
@@ -139,17 +150,65 @@ export default class SceneSetup {
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-        if(window.innerWidth<768){
-            this.mobilePov.startMobilePov();
-        }else {
-            this.mobilePov.startMobilePov();
 
-//            this.mobilePov.endMobilePov();
+        // Example usage in another part of your code
+        if (this.interactionDetector.isTouchInteraction()) {
+            console.log('Currently using touch interaction');
+            this.customCursor();
+        } else {
+            console.log('Currently using cursor interaction');
+            this.customCursor(1);
+
         }
+
+        if(window.innerWidth<768){
+            
+            
+            //this.mobilePov.startMobilePov();
+        }else {
+            //this.mobilePov.startMobilePov();
+        }
+    }
+
+    customCursor(borrar){
+        if(borrar){
+            const circleElement = document.getElementById('custom-cursor');
+            if(circleElement) circleElement.remove();
+        }
+        if(borrar) return;
+
+        if(document.getElementById('custom-cursor')) return;
+
+        const circleElement = document.createElement('div');
+        circleElement.id = 'custom-cursor';
+        circleElement.style=`
+                --cursor-size: 40px;
+                position: absolute;
+                z-index: 1000;
+                width: var(--cursor-size);
+                height: var(--cursor-size);
+                border: 1px solid #fff;
+                border-radius: 100%;
+                top: calc(-1 * var(--cursor-size) / 2);
+                left: calc(-1 * var(--cursor-size) / 2);
+                pointer-events: none;
+            `;
+        document.body.appendChild(circleElement);
+
+            const speed = 0.15;
+            const mouse = { x: 0, y: 0 },
+                  circle = { x: 0, y: 0 };
+            
+            window.addEventListener('mousemove', e => {
+              circle.x += (e.x - circle.x) * speed;
+              circle.y += (e.y - circle.y) * speed;
+              circleElement.style.transform = `translate(${circle.x}px, ${circle.y}px)`;
+            });
     }
 
     render() {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
+        //console.log(this.controls.getAzimuthalAngle().toFixed(2),this.controls.getPolarAngle().toFixed(2))
     }
 }
