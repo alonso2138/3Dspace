@@ -41,8 +41,8 @@ export default class SelectObject extends EventEmitter {
                 margin-top: 20px;
             }
             .brand-card, .model-card {
-                width: 200px;
-                height: 200px;
+                width: 50vh;
+                height: auto;
                 background-color: #ffffff;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -58,13 +58,17 @@ export default class SelectObject extends EventEmitter {
                 transform: scale(1.05);
             }
             .brand-card img, .model-card img {
-                width: 100%;
-                height: 100%;
+                width: 90%;
+                height: auto;
+                border-radius: 2rem;
                 object-fit: contain;
-                margin-bottom: 10px;
+                margin-bottom: 1rem;
+                margin-top: 1rem;
+
             }
             .brand-card h3, .model-card h3 {
-                font-size: 16px;
+                font-size: 2rem;
+                margin-bottom: 1rem;
                 color: #333;
             }
             .titulo {

@@ -19,15 +19,7 @@ export default class Welcome {
     startWelcome() {
         // Hide interface
         console.log("start")
-        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.opacity = 0;
-        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.pointerEvents = 'none';
-        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.opacity = 0;
-        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.pointerEvents = 'none';
-        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.opacity = 0;
-        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.pointerEvents = 'none';
-        if(document.querySelector('.webgl')) document.querySelector('.webgl').style.opacity = 0;
-        if(document.querySelector('.webgl')) document.querySelector('.webgl').style.pointerEvents = 'none';
-
+        this.setInterfaceOpacity(0,'none');
         if(document.querySelector('.welcome-overlay')) document.querySelector('.welcome-overlay').parentElement.removeChild(document.querySelector('.welcome-overlay'))
             
             
@@ -55,10 +47,9 @@ export default class Welcome {
 
         // Create welcome texts
         const texts = [
-            "¡Bienvenido a Tunerr!",
+            "¡Bienvenido a Your Essential Reality!",
             "Toca la pantalla para mirar alrededor 👆",
-            "Utiliza los botones laterales para moverte 🖲️",
-            "Personaliza tu casa con la barra inferior 🏡",
+            "Pulsa los botones para personalizar los muebles 🖲️",
             "Pulsa para continuar"
         ];
 
@@ -77,53 +68,51 @@ export default class Welcome {
 
         document.body.appendChild(this.overlay);
 
-        // Show texts with delay
-        texts.forEach((_, index) => {
-            setTimeout(() => {
-            console.log(index)
-
-                this.overlay.querySelector(`.welcome-text-${index + 1}`).style.opacity = 1;
-            }, (index + 1) * 2000);
-            if(index==4){
-                console.log("ahora")
-                setTimeout(() => {
-                    this.overlay.style.cursor = 'pointer'
-                }, 2500);
-            }
-        });
-
-        // Add click event to overlay
-        setTimeout(() => {
-            this.overlay.style.pointerEvents = 'auto';
-            this.overlay.addEventListener('click', this.endWelcome.bind(this));
-        }, texts.length * 1000 + 2000);
-
         // Show overlay
         setTimeout(() => {
             this.overlay.style.opacity = 1;
         }, 0);
+
+        // Show texts with delay
+        texts.forEach((_, index) => {
+            setTimeout(() => {
+            console.log(index)
+                this.overlay.querySelector(`.welcome-text-${index + 1}`).style.opacity = 1;
+                if(index==texts.length-1){
+                    console.log("ahora")
+                    setTimeout(() => {
+                        this.overlay.style.cursor = 'pointer'
+                        this.overlay.style.pointerEvents = 'auto';
+                        this.overlay.addEventListener('click', this.endWelcome.bind(this));
+                    }, 500);
+                }
+            }, (index + 1) * 2000);
+        });
+
+    }
+
+    setInterfaceOpacity(opacity,pe) {
+        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.opacity = opacity;
+        if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.pointerEvents = pe;
+        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.opacity = opacity;
+        if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.pointerEvents = pe;
+        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.opacity = opacity;
+        if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.pointerEvents = pe;
+        if(document.querySelector('.webgl')) document.querySelector('.webgl').style.pointerEvents = pe;
     }
 
     endWelcome() {
-        console.log("final")
+        this.setCookie('welcome', 'true', 15);
         if (this.overlay) {
             this.overlay.style.opacity = 0;
+
             setTimeout(() => {
                 if (this.overlay && this.overlay.parentNode) {
                     this.overlay.parentNode.removeChild(this.overlay);
                 }
                 this.overlay = null;
 
-                // Show interface
-                if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.opacity = 1;
-                if(document.querySelector('.top-nav-wrapper')) document.querySelector('.top-nav-wrapper').style.pointerEvents = 'auto';
-                if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.opacity = 1;
-                if(document.querySelector('.wrapper')) document.querySelector('.wrapper').style.pointerEvents = 'auto';
-                if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.opacity = 1;
-                if(document.querySelector('.puntosWrapper')) document.querySelector('.puntosWrapper').style.pointerEvents = 'auto';
-
-                // Set welcome cookie
-                this.setCookie('welcome', 'true', 1);
+                this.setInterfaceOpacity(1,'auto');
             }, 1000);
         }
     }

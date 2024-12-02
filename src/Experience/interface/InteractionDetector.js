@@ -12,13 +12,11 @@ export default class InteractionDetector {
 
     onMouseMove() {
         this.isTouch = false;
-        console.log('Cursor detected');
         // You can add additional logic here for cursor interactions
     }
 
     onTouchStart() {
         this.isTouch = true;
-        console.log('Touch detected');
         // You can add additional logic here for touch interactions
     }
 

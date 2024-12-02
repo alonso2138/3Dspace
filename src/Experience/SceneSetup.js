@@ -173,11 +173,14 @@ export default class SceneSetup {
     customCursor(borrar){
         if(borrar){
             const circleElement = document.getElementById('custom-cursor');
+            document.body.style.cursor = 'unset';
             if(circleElement) circleElement.remove();
         }
         if(borrar) return;
 
         if(document.getElementById('custom-cursor')) return;
+
+        document.body.style.cursor = 'none';
 
         const circleElement = document.createElement('div');
         circleElement.id = 'custom-cursor';
