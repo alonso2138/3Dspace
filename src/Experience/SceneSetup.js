@@ -212,6 +212,8 @@ export default class SceneSetup {
     render() {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
-        //console.log(this.controls.getAzimuthalAngle().toFixed(2),this.controls.getPolarAngle().toFixed(2))
+        console.log("______________________")
+        console.log((window.innerWidth/window.innerHeight).toFixed(2))
+        console.log(this.controls.getAzimuthalAngle().toFixed(2),this.controls.getPolarAngle().toFixed(2))
     }
 }
