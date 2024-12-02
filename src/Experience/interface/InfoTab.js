@@ -23,7 +23,7 @@ export default class InfoTab {
         //infoBox.querySelector('.image').src = custom.image[id];
         //infoBox.querySelector('.description').textContent = custom.title[id];
         //if(infoBox.querySelector('.price')) infoBox.querySelector('.price').textContent = `Precio: ${custom.price[id]} €`;
-        infoBox.querySelector('.InfoBoxTitle').textContent = "Elige el material para personalizar el  "+custom.name+":";
+        infoBox.querySelector('.InfoBoxTitle').textContent = "Elige el material para personalizar  "+custom.name+":";
 
 
         if(infoBox.querySelector('.InfoBoxImages')) infoBox.querySelector('.InfoBoxImages').innerHTML = '';
@@ -32,28 +32,36 @@ export default class InfoTab {
             wrapper.className = 'InfoBoxWrapper';
 
             const image = document.createElement('div');
+            image.className = 'image';
+            image.classList.add('image'+i);
+
+            const img = document.createElement('img');
+            image.appendChild(img);
+            img.src = custom.image[i];
+
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.classList.add('label'+i);
+            label.innerText = custom.title[i];
+
             image.addEventListener('click', () => {
-                console.log("seleccionado es "+id,"click en "+i)
                 if(id!=i){
                     if(document.querySelector('.image.selected')) document.querySelector('.image.selected').classList.remove('selected');
+                    if(document.querySelector('.label.selected')) document.querySelector('.label.selected').classList.remove('selected');
                     this.experience.rightBar.cartButton(custom, i);
                     image.classList.add('selected');
+                    label.classList.add('selected');
                 }
                 if (this.onSquareClick) this.onSquareClick(i);
                 //this.appearBox(custom, i);
             });
 
-            image.className = 'image';
-            image.classList.add('image'+i);
-
             if(id == i){
                 image.classList.add('selected');
+                label.classList.add('selected');
             }
-            image.style.backgroundImage = "url('"+custom.image[i]+"')";
 
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.innerText = custom.title[i];
+
 
             wrapper.appendChild(image);
             wrapper.appendChild(label);
@@ -148,7 +156,7 @@ export default class InfoTab {
         // Add event listener to the close button
         infoBox.querySelector('.close-btn').addEventListener('click', () => {
             this.experience.stopEditing(1);
-
+            
         });
     }
 
@@ -226,8 +234,20 @@ export default class InfoTab {
     transition: all 0.5s ease;
 }
 
-.info-box .image.selected {
-    box-shadow:inset 0px 0px 15px 3px #000000;
+.info-box .image img {
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    scale: 1;
+
+    transition: all 0.5s ease;
+}
+
+.info-box .image.selected img{
+    box-shadow: 2px 5px 15px 1px rgba(0, 0, 0, 0.7);
+    scale: 1.02;
 }
 
 .info-box .label {
@@ -237,6 +257,13 @@ export default class InfoTab {
     margin-top: 1rem;
     font-weight: 190;
     font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.info-box .label.selected {
+    margin-top: 1.1rem;
+    font-weight: 400;
+    font-size: 1.4rem;
 }
 
 .close-btn {

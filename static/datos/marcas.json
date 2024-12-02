@@ -9,6 +9,11 @@
                     "name": "Villa Klara",
                     "photo_url": "/images/1.jpeg",
                     "data_url": "/datos/3.json"
+                },
+                {
+                    "name": "Piso en avd Santander 12",
+                    "photo_url": "/images/2.jpg",
+                    "data_url": "/datos/1.json"
                 }
             ]
         }

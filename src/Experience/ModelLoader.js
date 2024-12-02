@@ -15,7 +15,6 @@ export default class ModelLoader {
     }
 
     loadModel(object, piezaEditando, id) {
-
         //console.log("Loading model: ",object, " for piece: ",piezaEditando, " with id: ",id);
         // CHECK IF LOADING MAIN OBJECT OR PART
         let position,scale;

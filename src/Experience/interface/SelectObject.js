@@ -41,7 +41,7 @@ export default class SelectObject extends EventEmitter {
                 margin-top: 20px;
             }
             .brand-card, .model-card {
-                width: 50vh;
+                width: 30vh;
                 height: auto;
                 background-color: #ffffff;
                 border-radius: 10px;
@@ -67,7 +67,7 @@ export default class SelectObject extends EventEmitter {
 
             }
             .brand-card h3, .model-card h3 {
-                font-size: 2rem;
+                font-size: 1.4rem;
                 margin-bottom: 1rem;
                 color: #333;
             }
@@ -98,8 +98,6 @@ export default class SelectObject extends EventEmitter {
     }
 
     generateBrandHTML() {
-        console.log(this.brands)
-
         if(document.querySelector("container")) document.querySelector("container").parentElement.removeChild(document.querySelector("container"))
         document.body.innerHTML = '';
 

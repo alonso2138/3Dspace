@@ -38,17 +38,9 @@ export default class SceneSetup {
         this.controls.enablePan = true; // Disable panning
         this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
         this.controls.dampingFactor = 0.01; // friction
-        this.controls.rotateSpeed = 0.2; // mouse sensitivity
         this.controls.enableDamping = true;
 
-        this.controls.minDistance = 4;
-        this.controls.maxDistance = 16;
-
-        this.controls.maxAzimuthAngle = 0.65;
-        this.controls.minAzimuthAngle = -0.55;
-        
-        this.controls.maxPolarAngle = 1.7;
-        this.controls.minPolarAngle = 1.14;
+        //this.controls.maxDistance = 20;
     }
 
     setupRenderer() {     
@@ -81,7 +73,6 @@ export default class SceneSetup {
     }
 
     moveCamera(cam,target){
-        console.log(cam,target)
         if(cam){
             // Pos as vector3
             gsap.to(this.camera.position, {
@@ -150,23 +141,39 @@ export default class SceneSetup {
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-
-        // Example usage in another part of your code
-        if (this.interactionDetector.isTouchInteraction()) {
-            console.log('Currently using touch interaction');
-            this.customCursor();
-        } else {
-            console.log('Currently using cursor interaction');
-            this.customCursor(1);
-
-        }
-
+        
         if(window.innerWidth<768){
-            
+            if(!this.experience.moto.controls.mobile) return;
+            this.setOrbitControlsProperties("mobile");
+            this.targetOriginal = this.experience.moto.controls.mobile.objetivo;
+            this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
             
             //this.mobilePov.startMobilePov();
         }else {
+            if(!this.experience.moto.controls.computer) return;
+            this.setOrbitControlsProperties("computer");
+            this.targetOriginal = this.experience.moto.lookAt[0];
+            this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
+            
             //this.mobilePov.startMobilePov();
+        }
+    }
+
+    setOrbitControlsProperties(device){
+        if(device=="computer"){
+            for (let property in this.experience.moto.controls.computer) {
+                if (this.experience.moto.controls.computer.hasOwnProperty(property) && this.controls.hasOwnProperty(property)) {
+                    this.controls[property] = this.experience.moto.controls.computer[property];
+                }
+            }
+        }else if(device=="mobile"){
+            for (let property in this.experience.moto.controls.mobile) {
+                if (this.experience.moto.controls.mobile.hasOwnProperty(property) && this.controls.hasOwnProperty(property)) {
+                    this.controls[property] = this.experience.moto.controls.mobile[property];
+                }
+            }
+        }else{
+            console.error("Device not found")
         }
     }
 
@@ -212,8 +219,8 @@ export default class SceneSetup {
     render() {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
-        console.log("______________________")
-        console.log((window.innerWidth/window.innerHeight).toFixed(2))
-        console.log(this.controls.getAzimuthalAngle().toFixed(2),this.controls.getPolarAngle().toFixed(2))
+        //console.log("______________________")
+        //console.log((window.innerWidth/window.innerHeight).toFixed(2))
+        //console.log(this.controls.getAzimuthalAngle().toFixed(2),this.controls.getPolarAngle().toFixed(2))
     }
 }

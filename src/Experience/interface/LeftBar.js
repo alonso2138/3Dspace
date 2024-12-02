@@ -12,8 +12,6 @@ export default class LeftBar  {
     }
 
     injectStylesComputer() {
-        console.log("injecting computer styles");
-
         const styles = `
             .custom-container-wrapper{
                 
@@ -99,7 +97,6 @@ export default class LeftBar  {
     }
     
     injectStylesMobile() {
-        console.log("injecting mobile styles");
         const styles = `
             .custom-container-wrapper{
                 width: 100%;
@@ -260,11 +257,9 @@ export default class LeftBar  {
 
     resize(){
         if(this.detectMobile()){
-            console.log("mobile");
             this.injectStylesMobile();
             this.removeStylesComputer();
         } else {
-            console.log("computer");
             this.injectStylesComputer();
             this.removeStylesMobile();
         }

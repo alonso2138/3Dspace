@@ -51,20 +51,20 @@ export default class BottomBar {
     generateCustom(object, id){
         const point = document.createElement('div');
         point.classList.add('point','point-'+id,'visible');
-        point.id = 'point-'+this.experience.piezaEditando;
+        point.id = 'point-'+id;
 
-        const label = document.createElement('div');
-        label.classList.add('label');
-        label.addEventListener('click', () => {
+        const circulo = document.createElement('div');
+        circulo.classList.add('circulo');
+        circulo.addEventListener('click', () => {
             if (this.onParentSquareClick) this.onParentSquareClick(id);
         });
 
-        point.appendChild(label);
+        point.appendChild(circulo);
         document.body.appendChild(point);
 
         this.points.push({
-            position: new THREE.Vector3(-5, 1, 3),
-            element: document.querySelector('.point-'+id)
+            position: new THREE.Vector3(object.point[0], object.point[1], object.point[2]),
+            element: document.getElementById(point.id)
         });
     }
 
@@ -95,7 +95,7 @@ export default class BottomBar {
 
             }
 
-            .point .label{
+            .point .circulo{
                 position: absolute;
                 top: -20px;
                 left: -20px;
@@ -119,7 +119,7 @@ export default class BottomBar {
                 animation: pulseEffect 2s infinite; /* Animation duration and repeat */
             }
             
-            .point.visible .label{
+            .point.visible .circulo{
                 transform: scale(1, 1);
             }
 

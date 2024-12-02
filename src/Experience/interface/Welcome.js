@@ -9,7 +9,6 @@ export default class Welcome {
         const welcomeCookie = this.getCookie('welcome');
         if (welcomeCookie) {
             //this.startWelcome();
-            console.log("cookie")
             this.endWelcome();
         } else {
             this.startWelcome();
@@ -18,7 +17,6 @@ export default class Welcome {
 
     startWelcome() {
         // Hide interface
-        console.log("start")
         this.setInterfaceOpacity(0,'none');
         if(document.querySelector('.welcome-overlay')) document.querySelector('.welcome-overlay').parentElement.removeChild(document.querySelector('.welcome-overlay'))
             
@@ -76,10 +74,8 @@ export default class Welcome {
         // Show texts with delay
         texts.forEach((_, index) => {
             setTimeout(() => {
-            console.log(index)
                 this.overlay.querySelector(`.welcome-text-${index + 1}`).style.opacity = 1;
                 if(index==texts.length-1){
-                    console.log("ahora")
                     setTimeout(() => {
                         this.overlay.style.cursor = 'pointer'
                         this.overlay.style.pointerEvents = 'auto';

@@ -107,6 +107,9 @@ export default class Experience {
 
     // Function to load JSON data
     async loadMotoData(path) {
+        const match = path.match(/\/datos\/(\d+)\.json/);
+        this.path = match ? match[1] : null;
+
         try {
             const response = await fetch(path);
             const jsonData = await response.json();
@@ -148,7 +151,8 @@ export default class Experience {
             selectedPieces,
             piezaEditando
         };
-        document.cookie = `motoConfig=${JSON.stringify(cookieData)}; path=/; max-age=31536000`; // 1 year
+
+        document.cookie = this.path+`motoConfig=${JSON.stringify(cookieData)}; path=/; max-age=31536000`; // 1 year
 
         //const config = this.moto.customs.map(custom => custom.selected);
         //document.cookie = `motoConfig=${JSON.stringify(config)}; path=/; max-age=31536000`; // 1 year
@@ -196,13 +200,14 @@ export default class Experience {
         }else {*/
             if( this.piezaEditando==id){
 
-                this.stopEditing(true);
+                //this.stopEditing(true);
                 this.piezaEditando=undefined;
 
             }else{
                 
-                this.stopEditing(true);
+                //this.stopEditing(true);
                 this.piezaEditando=id;
+                this.startEditing();
                 if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
 
                 setTimeout(() => {
@@ -240,9 +245,10 @@ export default class Experience {
 
         if(document.querySelector('.selected')){
             document.querySelector('.image.selected').classList.remove('selected');
+            document.querySelector('.label.selected').classList.remove('selected');
         }
-        console.log(document.querySelector('.image'+id))
         document.querySelector('.image'+id).classList.add('selected');
+        document.querySelector('.label'+id).classList.add('selected');
 
         this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
         if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
@@ -257,18 +263,21 @@ export default class Experience {
 
     stopEditing(cameraReset){
         if(this.sceneSetup)this.sceneSetup.controls.enabled = true;
-        if(this.piezaEditando==undefined) return;
-        const id=this.piezaEditando
-        this.bottomBar.deleteBottomBar();
-        if(this.outline) this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[id]);
-        if(cameraReset) this.sceneSetup.resetCamera();
-        if(this.infoTab) this.infoTab.disappearBox();
-        this.modelLoader.loadModel(this.moto.customs[id],  id, this.moto.customs[id].selected)
-        //if(document.getElementById('ParentSquare'+this.piezaEditando)) document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
+
+        //if(this.piezaEditando==undefined) return;
+        this.piezaEditando=undefined;
         if(document.querySelector('.point')){
             document.querySelector('.point').style.opacity = '1';
             document.querySelector('.point').style.pointerEvents = 'all';
         }
+        
+        this.bottomBar.deleteBottomBar();
+        if(this.outline) this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[this.piezaEditando]);
+        if(cameraReset) this.sceneSetup.resetCamera();
+        if(this.infoTab) this.infoTab.disappearBox();
+        this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando, this.moto.customs[this.piezaEditando].selected)
+        //if(document.getElementById('ParentSquare'+this.piezaEditando)) document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
+
     }
 
     startEditing(){
@@ -301,7 +310,7 @@ export default class Experience {
         //Load cart
 
         // Check for existing cookie
-        const cookieData = this.getCookie('motoConfig');
+        const cookieData = this.getCookie(this.path+'motoConfig');
         if (cookieData) {
             // COOKIE DETECTED
             const savedConfig = JSON.parse(cookieData);
@@ -328,8 +337,6 @@ export default class Experience {
         this.bottomBar.init();
 
         //this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
-
-        console.log(document.querySelector('.puntosWrapper'))
 
         // Load main Object
         this.modelLoader.loadModel(this.moto, undefined, 0,false);

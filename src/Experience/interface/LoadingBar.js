@@ -22,7 +22,6 @@ export default class LoadingBar {
         loadingScreen.appendChild(loadingText);
         document.body.appendChild(loadingScreen);
 
-        console.log("Loading screen created");
         // Inject CSS for loading screen
         const style = document.createElement('style');
         style.textContent = `

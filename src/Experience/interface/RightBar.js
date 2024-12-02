@@ -224,7 +224,12 @@ export default class RightBar {
         backButton1.className = 'back-button1';
         backButton1.innerHTML = '←';
         backButton1.addEventListener('click', () => {
-            this.experience.restartExperience();
+            console.log(this.experience.piezaEditando)
+            if(this.experience.piezaEditando!=undefined){
+                this.experience.stopEditing(1);
+            }else{
+                this.experience.restartExperience();
+            }
         });
         document.body.appendChild(backButton1);
 
@@ -810,7 +815,6 @@ export default class RightBar {
         
         this.updateList();
         this.experience.moto.customs[this.experience.piezaEditando].selected = id;
-        console.log("El seleccionado es "+this.experience.moto.customs[this.experience.piezaEditando].selected)
         //this.experience.infoTab.appearBox(custom,id);
 
         this.experience.updateCookie();
@@ -904,5 +908,7 @@ export default class RightBar {
         // Update the total price
         totalElement1.textContent = `Total: ${this.calculateTotal()} €`;
         totalElement2.textContent = `${this.calculateTotal()} €`;
+
+        this.experience.updateCookie();
     }
 }
