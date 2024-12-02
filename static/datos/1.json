@@ -8,24 +8,7 @@
     "scale": [1, 1, 1],
     "povs": [[-15.1,14.3,-8.7],[2,2.2,2.8],[6, 2.5, 3],[3, 11, 0]],
     "lookAt": [[2.3,1.2,1.7],[0.9, 0, 1.6],[2.1,1.6,2.5]],
-    "customs": [
-        {
-            "point": [-1.5,0.8,2.5],
-            "name": "Encimera cocina",
-            "img": "images/0/default.png",
-            "id": [1, 2],
-            "title": ["Madera", "Mármol"],
-            "url": ["models/11.glb", "models/12.glb"],
-            "camera_position": [-3.1, 3, -1.7],
-            "camera_target": [-0.7, 1, 2.5],
-            "position": [[0, 0, 0], [0, 0, 0]],
-            "scale": [[1, 1, 1], [1, 1, 1]],
-            "selected": 0,
-            "image": ["images/1/1/1.jpg", "images/1/1/2.png"],
-            "price": [256.34, 464.10],
-            "price_id": ["1", "1"]
-        }
-    ],
+    "customs": [],
     "controls": 
     {
         "computer":{
