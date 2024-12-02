@@ -74,21 +74,21 @@
             "price_id": ["1", "1"]
         },       
         {
-            "point": [-0.0,2.9,-0.3],
+            "point": [-100.0, -100, -100],
             "name": "Paredes y suelo",
             "img": "images/0/default.png",
-            "id": [1, 2],
-            "title": ["Blanco minimalista", "Rojo atrevido"],
-            "url": ["models/51.glb", "models/52.glb"],
-            "camera_position": [-3.3,8.5,-3.7],
+            "id": [1],
+            "title": ["Blanco minimalista"],
+            "url": ["models/51.glb"],
+            "camera_position": [-3.3, 8.5, -3.7],
             "camera_target": [2, 2, 2],
-            "position": [[0, 0, 0], [0, 0, 0]],
-            "scale": [[1, 1, 1], [1, 1, 1]],
+            "position": [[0, 0, 0]],
+            "scale": [[1, 1, 1]],
             "selected": 0,
-            "image": ["images/1/5/1.jpg", "images/1/5/2.jpg"],
-            "price": [32.00, 54.00],
-            "price_id": ["1", "1"]
-        }
+            "image": ["images/1/5/1.jpg"],
+            "price": [32.00],
+            "price_id": ["1"]
+                    }
     ],
     "controls": 
     {
