@@ -55,7 +55,6 @@ export default class Experience {
     }
 
     async init(){
-        console.log("init")
         // Start the scene
         try{
             const quickCookie = this.getCookie('currentMoto');
@@ -68,7 +67,6 @@ export default class Experience {
                         this.quickCookie(path)
                     
                 }else{
-                    console.log("start no loadin")
                     this.canvas.style.display = 'block';
 
                     this.startFunction(path);

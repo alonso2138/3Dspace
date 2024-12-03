@@ -42,11 +42,9 @@ export default class SceneSetup {
 
         this.controls.addEventListener('start', () => {
             document.body.style.cursor='move'
-            console.log("hoo")
         });
         this.controls.addEventListener('end', () => {
             document.body.style.cursor='auto'
-            console.log("ooh")
         });
         //this.controls.maxDistance = 20;
     }
