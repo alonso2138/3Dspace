@@ -36,7 +36,7 @@
             "minAzimuthAngle": -0.55,
             "maxPolarAngle": 1.7,
             "minPolarAngle": 1.14,
-            "rotateSpeed": 0.2
+            "rotateSpeed": 0.4
         },
         "mobile":{
             "maxDistance": 11,

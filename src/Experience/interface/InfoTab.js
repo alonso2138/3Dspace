@@ -194,7 +194,6 @@ export default class InfoTab {
     font-weight: 200;
     font-size: 160%;
     font-style: normal;
-    color: var(--Text); /* Replaced with variable */
     text-transform: uppercase;
 }
 

@@ -40,6 +40,14 @@ export default class SceneSetup {
         this.controls.dampingFactor = 0.01; // friction
         this.controls.enableDamping = true;
 
+        this.controls.addEventListener('start', () => {
+            document.body.style.cursor='move'
+            console.log("hoo")
+        });
+        this.controls.addEventListener('end', () => {
+            document.body.style.cursor='auto'
+            console.log("ooh")
+        });
         //this.controls.maxDistance = 20;
     }
 
