@@ -19,11 +19,6 @@ export default class SelectObject extends EventEmitter {
 
     injectStyles() {
         const styles = `
-            body {
-                background-color: #f0f0f0;
-                font-family: 'Arial', sans-serif;
-                transition: filter 0.5s ease;
-            }
             .container {
                 display: flex;
                 flex-direction: column;
@@ -60,7 +55,7 @@ export default class SelectObject extends EventEmitter {
             .brand-card img, .model-card img {
                 width: 90%;
                 height: auto;
-                border-radius: 2rem;
+                border-radius: 10px;
                 object-fit: contain;
                 margin-bottom: 1rem;
                 margin-top: 1rem;
