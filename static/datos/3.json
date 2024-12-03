@@ -39,10 +39,10 @@
             "rotateSpeed": 0.2
         },
         "mobile":{
-            "maxDistance": 16,
-            "minDistance": 4,
-            "maxAzimuthAngle": 0.65,
-            "minAzimuthAngle": -0.55,
+            "maxDistance": 11,
+            "minDistance": 3,
+            "maxAzimuthAngle": 1.17,
+            "minAzimuthAngle": -1,
             "maxPolarAngle": 1.7,
             "minPolarAngle": 1.14,
             "rotateSpeed": 0.6,

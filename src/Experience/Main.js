@@ -13,6 +13,7 @@ import Outline from './Model/Outline.js';
 import Stats from 'stats.js';
 import LoadMarcas from './Model/LoadMarcas.js';
 import Welcome from './interface/Welcome.js';
+import { UnpackDepthRGBAShader } from 'three/examples/jsm/Addons.js';
 
 let instance = null;
  
@@ -23,8 +24,6 @@ export default class Experience {
             return instance;
         }
         instance = this;
-
-        this.contador=0;
 
         // Global access
         window.experience = this;
@@ -37,10 +36,10 @@ export default class Experience {
         //document.body.appendChild(this.stats.dom);
 
         // Initialize LoadMarcas
-        this.init();
+        this.preInit();
     }
 
-    async init(){
+    async preInit(){
         // Carcar marcas
         this.loadMarcas = new LoadMarcas();
         await this.loadMarcas.init();
@@ -48,61 +47,53 @@ export default class Experience {
         // Load colors
         this.loadColors = new LoadColors();
 
+        // Initialize this.selectObject
+        this.selectObject = new SelectObject();
+        this.selectObject.init();
+
+        this.init();
+    }
+
+    async init(){
+        console.log("init")
         // Start the scene
         try{
             const quickCookie = this.getCookie('currentMoto');
-            //console.log(quickCookie);
-            if(quickCookie){
-                this.startNoLoading(quickCookie);
-            }else{
-                this.startNormal();
-            }
+            this.selectObject.on('modelSelected', (path) => {
+                if(quickCookie){
+                    console.log("start normal")
+                    this.canvas.style.display = 'block';
+
+                        this.startFunction(path);
+                        this.quickCookie(path)
+                    
+                }else{
+                    console.log("start no loadin")
+                    this.canvas.style.display = 'block';
+
+                    this.startFunction(path);
+                }
+            });
         }catch(e){
             console.log(e);
         }
     }
 
-    startNormal(){
-        // Model selection
-        this.selectObject = new SelectObject();
-        //Initialize the model selection interface
-        this.selectObject.on('modelSelected', (path) => {
-            // Show canvas
-            this.canvas.style.display = 'block';
-
-            this.quickCookie(path);
-            this.loadMotoData(path).then(() => {
+    startFunction(path){
+        this.loadMotoData(path).then(() => 
+            {
 
                 // Start loading resources once the object data is loaded
                 this.resources = new Resources();
-    
+
                 // Set up loading bar
                 this.loadingBar = new LoadingBar();
-    
+
                 // Finally load the scene when all the resources are loaded
                 this.resources.on('ready', () => {
                     this.initScene();
                 });
             });
-        });
-    }
-
-    startNoLoading(path){
-        //path = '/datos/Triumph_Speed_Triple_Se_2013.json ';
-        this.loadMotoData(path).then(() => 
-        {
-
-            // Start loading resources once the object data is loaded
-            this.resources = new Resources();
-
-            // Set up loading bar
-            this.loadingBar = new LoadingBar();
-
-            // Finally load the scene when all the resources are loaded
-            this.resources.on('ready', () => {
-                this.initScene();
-            });
-        });
     }
 
     // Function to load JSON data
@@ -168,6 +159,9 @@ export default class Experience {
         this.canvas.style.display = 'none';
         document.cookie = `currentMoto=; path=/; max-age=100`; 
 
+        // Var restart
+        this.piezaEditando = undefined;
+
         // Clear interface
         if(this.bottomBar)  this.bottomBar.destroyBottomBar();
         if(this.rightBar) this.rightBar.deleteRightBar();
@@ -182,7 +176,7 @@ export default class Experience {
         }
 
         // Reinitialize the model selection interface
-        this.startNormal();
+        this.selectObject.init();
     }
 
     // Callback function for parent square click
@@ -340,11 +334,13 @@ export default class Experience {
 
         // Load main Object
         this.modelLoader.loadModel(this.moto, undefined, 0,false);
-
         // Generate boxes and model for each type of piece
         for (let i = 0; i < this.moto.customs.length; i++) {
+            //console.log("resources.items["+i+""+this.moto.customs[i].id[this.moto.customs[i].selected]+"].scene");
+            //console.log(this.modelLoader.resources)
+
             this.bottomBar.generateCustom(this.moto.customs[i], i);
-            this.modelLoader.loadModel(this.moto.customs[i], i, this.moto.customs[i].selected,false);
+            this.modelLoader.loadModel(this.moto.customs[i], i, this.moto.customs[i].selected);
         }
 
         // Time tick event
@@ -372,8 +368,6 @@ export default class Experience {
 
     update()
     {
-        this.contador++;
-
         //this.stats.begin()
         this.sceneSetup.render();
         this.bottomBar.update();

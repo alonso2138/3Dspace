@@ -14,12 +14,12 @@ export default class SelectObject extends EventEmitter {
         this.experience = new Experience();
 
         this.brands = this.experience.loadMarcas.marcas;
-        this.init();
     }
 
     injectStyles() {
         const styles = `
             .container {
+                font-family: 'Inter', sans-serif;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -62,13 +62,16 @@ export default class SelectObject extends EventEmitter {
 
             }
             .brand-card h3, .model-card h3 {
+                font-weight: 200;
                 font-size: 1.4rem;
                 margin-bottom: 1rem;
                 color: #333;
             }
             .titulo {
                 font-size: 24px;
-                font-family: 'Futura', sans-serif;
+                font-family: 'Inter', sans-serif;
+                font-weight: 200;
+                text-transform: uppercase;
                 color: #333;
                 margin-bottom: 20px;
             }
@@ -129,13 +132,14 @@ export default class SelectObject extends EventEmitter {
     }
 
     showModels(brand) {
+        this.started = true;
         // Apply blur effect
         document.body.classList.add('blurred');
 
         // Clear the current content after the blur animation
         setTimeout(() => {
             // Clear the current content
-            document.body.innerHTML = '';
+            if(document.querySelector('.container')) document.querySelector('.container').remove();
 
             const container = document.createElement('div');
             container.className = 'container';
@@ -144,7 +148,7 @@ export default class SelectObject extends EventEmitter {
             backButton.className = 'back-button';
             backButton.innerHTML = '←';
             backButton.addEventListener('click', () => {
-                document.body.innerHTML = '';
+                if(document.querySelector('.container')) document.querySelector('.container').remove();;
                 this.generateBrandHTML();
             });
             container.appendChild(backButton);
@@ -206,11 +210,14 @@ export default class SelectObject extends EventEmitter {
         const container = document.querySelector('.container');
         container.remove();
 
-
         this.trigger('modelSelected', [path]);
     }
 
     async init() {
+        if(this.started){
+            this.showModels(this.brands[0])
+        }
         this.generateBrandHTML();
+        
     }
 }

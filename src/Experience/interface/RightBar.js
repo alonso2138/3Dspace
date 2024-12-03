@@ -9,13 +9,13 @@ export default class RightBar {
 
         this.selectedPieces = [];
 
-        this.initStripe();
-        this.generateTopNav();
+        //this.initStripe();
+        //this.generateTopNav();
         this.generateHTML();
         this.injectStyles();
 
         // Initialize the cart overlay
-        this.initCartOverlay();
+        //this.initCartOverlay();
     }
 
     async initStripe() {
@@ -96,7 +96,7 @@ export default class RightBar {
         const topnav = document.querySelector('.top-nav-wrapper');
         content.remove();
         overlay.remove();
-        topnav.remove();
+        if(topnav) topnav.remove();
     }
 
     initCartOverlay() {
@@ -176,7 +176,6 @@ export default class RightBar {
                 const data = await response.json();
                 return data.country_code.toLowerCase(); // Returns the country code in lowercase
             } catch (error) {
-                console.error('Error fetching country code:', error);
                 return null;
             }
         }
@@ -224,7 +223,6 @@ export default class RightBar {
         backButton1.className = 'back-button1';
         backButton1.innerHTML = '←';
         backButton1.addEventListener('click', () => {
-            console.log(this.experience.piezaEditando)
             if(this.experience.piezaEditando!=undefined){
                 this.experience.stopEditing(1);
             }else{
@@ -753,6 +751,9 @@ export default class RightBar {
 
     resize(){
         const totalElement1 = document.getElementById('toggle-cart');
+
+        if(!document.getElementById('toggle-cart')) return;
+
         const gilipoya = '<div id="notification"></div>';
 
         if(window.innerWidth<768){
@@ -765,8 +766,10 @@ export default class RightBar {
     }    
 
     updateList() {
+        return;
         const overlay = document.getElementById('cart-overlay');
         const totalElement1 = overlay.querySelector('.total');
+
         const totalElement2 = document.getElementById('Total');
 
         const piecesList = overlay.querySelector('ul');
@@ -803,7 +806,7 @@ export default class RightBar {
 
     addToCart(custom,id){
         //Notification
-        document.getElementById('notification').style.opacity = 0;
+        if(document.getElementById('notification')) document.getElementById('notification').style.opacity = 0;
 
         //Delete existing piece in cart
         const index = this.selectedPieces.findIndex(piece => piece.piezaEditando === this.experience.piezaEditando);
@@ -886,6 +889,8 @@ export default class RightBar {
                 
             });*/
         }
+
+        return;
 
         const overlay = document.getElementById('cart-overlay');
         const totalElement1 = overlay.querySelector('.total');

@@ -68,7 +68,7 @@ export default class SceneSetup {
                 duration: 3,
                 ease: "elastic.inOut" // You can choose any easing function you prefer
             });
-        }, 200);
+        }, 100);
 
     }
 
@@ -134,6 +134,7 @@ export default class SceneSetup {
         this.scene.environment = environmentMap;
         if(this.experience.moto.sky!="") this.scene.background = environmentMap;
     }
+
     resize() {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();

@@ -4,6 +4,7 @@ let instance = null;
 
 export default class BottomBar {
     constructor(containerId, onSquareClick, onParentSquareClick, infoTabAppear,disappearBox) {
+        this.points = [];
         // Singleton
         if (instance) {
             return instance;
@@ -20,8 +21,6 @@ export default class BottomBar {
 
         this.animationTimeout=100;
         this.isAnimating = false; // Flag to track animation state
-
-        this.points = [];
 
         this.styleSheet = null;
         this.styleSheetMobile = null;
@@ -61,6 +60,8 @@ export default class BottomBar {
 
         point.appendChild(circulo);
         document.body.appendChild(point);
+
+        //console.log(object)
 
         this.points.push({
             position: new THREE.Vector3(object.point[0], object.point[1], object.point[2]),
@@ -425,6 +426,12 @@ export default class BottomBar {
     }*/
 
     destroyBottomBar() {
+        // Delete points element
+        for(const point of this.points){
+            point.element.remove;
+        }
+        this.points = [];
+
         // Delete wrapper element
         const wrapper = document.querySelector('.wrapper');
         if (wrapper) {
@@ -500,12 +507,18 @@ export default class BottomBar {
     }
 
     update(){
+
+        //console.log()
+
         for(const point of this.points){
             const screenPosition = point.position.clone()
             screenPosition.project(this.experience.sceneSetup.camera)
+
     
             const translateX = screenPosition.x * window.screen.width * 0.5
             const translateY = - screenPosition.y * window.screen.height * 0.5
+
+            //console.log(this.points)
             point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
         }
     }

@@ -8,6 +8,7 @@ export default class Resources extends EventEmitter
     constructor()
     {
         super()
+        
         this.experience = new Experience();
 
         this.toLoad = 0;
@@ -25,8 +26,7 @@ export default class Resources extends EventEmitter
         // +1 For the environment map
         this.toLoad += 2;
 
-        this.items = {}
-
+        this.items = {} 
         this.setLoaders()
         this.startLoading()
     }
