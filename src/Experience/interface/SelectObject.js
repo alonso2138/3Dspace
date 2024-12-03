@@ -27,7 +27,14 @@ export default class SelectObject extends EventEmitter {
                 height: 100vh;
                 text-align: center;
                 z-index: 2;
+                opacity: 1;
+                transition: 1s ease;
             }
+
+            .container.hide{
+                opacity: 0;
+            }
+
             .brand-container, .model-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -101,6 +108,7 @@ export default class SelectObject extends EventEmitter {
 
         const container = document.createElement('div');
         container.className = 'container';
+        container.classList.add('hide');
 
         const titulo = document.createElement('h1');
         titulo.className = 'titulo';
@@ -118,6 +126,11 @@ export default class SelectObject extends EventEmitter {
             const img = document.createElement('img');
             img.src = brand.photo_url;
             img.alt = brand.name;
+
+            img.addEventListener('load', function () {
+                container.classList.remove('hide');
+
+            })
 
             const brandtitulo = document.createElement('h3');
             brandtitulo.textContent = brand.name;
@@ -143,6 +156,7 @@ export default class SelectObject extends EventEmitter {
 
             const container = document.createElement('div');
             container.className = 'container';
+            container.classList.add('hide');
 
             const backButton = document.createElement('a');
             backButton.className = 'back-button';
@@ -169,6 +183,11 @@ export default class SelectObject extends EventEmitter {
                 const img = document.createElement('img');
                 img.src = model.photo_url;
                 img.alt = model.name;
+
+                img.addEventListener('load', function () {
+                    container.classList.remove('hide');
+    
+                })
 
                 const modeltitulo = document.createElement('h3');
                 modeltitulo.textContent = model.name;
