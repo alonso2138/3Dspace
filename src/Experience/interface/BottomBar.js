@@ -131,6 +131,7 @@ export default class BottomBar {
 
 
             .wrapper {
+                pointer-events:none;
                 overflow: hidden;
                 width: 100%;
                 height: 25%;
