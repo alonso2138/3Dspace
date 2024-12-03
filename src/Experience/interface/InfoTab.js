@@ -168,6 +168,8 @@ export default class InfoTab {
     align-items: center;
     flex-direction: column;
 
+    padding: 0 1rem;
+
     position: absolute;
     right: 0;
     width: 100%;
@@ -336,6 +338,7 @@ position: inherit;
 @media (max-width: 800px) {
     .info-box {
         max-width: 100%;
+        padding: 0;
     }
 
     .add-cart {
