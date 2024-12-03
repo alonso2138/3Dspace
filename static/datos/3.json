@@ -45,7 +45,7 @@
             "minAzimuthAngle": -1,
             "maxPolarAngle": 1.7,
             "minPolarAngle": 1.14,
-            "rotateSpeed": 0.6,
+            "rotateSpeed": 1.0,
             "objetivo": [0.0,3.9,13.3]
         }
     }
