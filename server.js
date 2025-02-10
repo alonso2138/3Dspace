@@ -28,6 +28,13 @@ app.post('/create-checkout-session', async (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
+/*
+app.post("/api/guardarMovimiento", (req, res) => {
+    const { tiempo } = req.body;
+    console.log(`Tiempo activo registrado: ${tiempo} segundos`);
+    // Aquí guardarías el dato en una base de datos, por ejemplo, MongoDB o PostgreSQL
+    res.sendStatus(200);
+});*/
 
 // Use the PORT environment variable provided by Heroku
 const PORT = process.env.PORT || 3000;

@@ -515,9 +515,12 @@ export default class BottomBar {
             const screenPosition = point.position.clone()
             screenPosition.project(this.experience.sceneSetup.camera)
 
-    
-            const translateX = screenPosition.x * window.screen.width * 0.5
-            const translateY = - screenPosition.y * window.screen.height * 0.5
+            console.log("x: "+window.screen.width, "\n y: "+window.screen.height)
+            //console.log("x: "+this.experience.sizes.width, "\n y: "+this.experience.sizes.height)
+
+
+            const translateX = screenPosition.x * window.innerWidth * 0.5
+            const translateY = - screenPosition.y * window.innerHeight * 0.5
 
             //console.log(this.points)
             point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
