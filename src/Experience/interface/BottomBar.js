@@ -504,7 +504,7 @@ export default class BottomBar {
 
     init() {
         this.injectStylesComputer();
-        this.generateHTML();
+        //this.generateHTML();
     }
 
     update(){
