@@ -1,5 +1,4 @@
 const express = require('express');
-const stripe = require('stripe')('sk_test_51JprSpH6YrdtkYECuPCY9zC2NFGRYuEBZLes9paj0cRrjSoMTAi1nX3lBYgzsaH7kxeT8KAFZUE3EG18CdJPE4Xq00gC0QbE7Y');
 const cors = require('cors');
 const path = require('path');
 const app = express();
@@ -8,34 +7,17 @@ app.use(cors()); // Enable CORS
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json());
 
-app.post('/create-checkout-session', async (req, res) => {
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: req.body,
-        mode: 'payment',
-        billing_address_collection: 'required', // Collect billing address
-        shipping_address_collection: {
-            allowed_countries: ['ES', 'FR', 'IT', 'AD'] // Add the countries you want to allow
-        },
-        success_url: `${req.headers.origin}/success`,
-        cancel_url: `${req.headers.origin}/cancel`,
-    });
-
-    res.json({ id: session.id });
-});
-
 // Serve the index.html file for the root path
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
-/*
-app.post("/api/guardarMovimiento", (req, res) => {
-    const { tiempo } = req.body;
-    console.log(`Tiempo activo registrado: ${tiempo} segundos`);
-    // Aquí guardarías el dato en una base de datos, por ejemplo, MongoDB o PostgreSQL
-    res.sendStatus(200);
-});*/
 
-// Use the PORT environment variable provided by Heroku
+app.use((req, res, next) => {
+    if (req.url.endsWith('.usdz')) {
+      res.setHeader('Content-Type', 'model/vnd.usdz+zip');
+    }
+    next();
+  });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
