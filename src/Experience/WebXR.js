@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
 export default class WebXR
 {
@@ -12,6 +13,8 @@ export default class WebXR
         this.renderer = null
         this.model = null
         this.reticle = null
+
+        this.init();
     }
 
     init()
@@ -35,10 +38,15 @@ export default class WebXR
         this.container.appendChild(ARButton.createButton(this.renderer))
         this.container.appendChild(this.renderer.domElement)
 
+        // Configurar Draco loader
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+
         // Cargar modelo
         const loader = new GLTFLoader()
+        loader.setDRACOLoader(dracoLoader);
         loader.load(
-            'models/sof1.glb',
+            'models/1.glb',
             (gltf) => {
                 this.model = gltf.scene
             },
