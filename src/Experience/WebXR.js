@@ -17,6 +17,9 @@ export default class WebXR
         this.hitTestSource = null
         this.hitTestSourceRequested = false
         
+        // Check if it's iOS
+        this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
         this.init();
     }
 
@@ -46,34 +49,75 @@ export default class WebXR
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.renderer.xr.enabled = true
 
-        // Add AR button to the document body (not to the canvas)
-        document.body.appendChild(ARButton.createButton(this.renderer, {
-            requiredFeatures: ['hit-test']
-        }))
+        // Add appropriate AR button based on device
+        if (this.isIOS) {
+            this.addIOSARButton();
+        } else {
+            // Add WebXR AR button for supported devices
+            try {
+                document.body.appendChild(ARButton.createButton(this.renderer, {
+                    requiredFeatures: ['hit-test']
+                }));
+                
+                // Create a simple cube for WebXR
+                const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+                const material = new THREE.MeshStandardMaterial({ 
+                    color: 0x00ff00,
+                    roughness: 0.7,
+                    metalness: 0.3
+                });
+                this.cube = new THREE.Mesh(geometry, material);
+                this.cube.visible = false; // Hide initially
+                this.scene.add(this.cube);
 
-        // Create a simple cube
-        const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-        const material = new THREE.MeshStandardMaterial({ 
-            color: 0x00ff00,
-            roughness: 0.7,
-            metalness: 0.3
-        });
-        this.cube = new THREE.Mesh(geometry, material);
-        this.cube.visible = false; // Hide initially
-        this.scene.add(this.cube);
+                // Create reticle for placement indication
+                const ringGeo = new THREE.RingGeometry(0.1, 0.15, 32).rotateX(-Math.PI / 2)
+                const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+                this.reticle = new THREE.Mesh(ringGeo, ringMat)
+                this.reticle.matrixAutoUpdate = false
+                this.reticle.visible = false
+                this.scene.add(this.reticle)
 
-        // Create reticle for placement indication
-        const ringGeo = new THREE.RingGeometry(0.1, 0.15, 32).rotateX(-Math.PI / 2)
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-        this.reticle = new THREE.Mesh(ringGeo, ringMat)
-        this.reticle.matrixAutoUpdate = false
-        this.reticle.visible = false
-        this.scene.add(this.reticle)
+                // XR controller setup
+                const controller = this.renderer.xr.getController(0)
+                controller.addEventListener('select', () => this.onSelect())
+                this.scene.add(controller)
+            } catch (e) {
+                console.error('WebXR not supported:', e);
+                this.addUnsupportedMessage();
+            }
+        }
 
-        // XR controller setup
-        const controller = this.renderer.xr.getController(0)
-        controller.addEventListener('select', () => this.onSelect())
-        this.scene.add(controller)
+        // Add a simple object to view in non-AR mode
+        const normalCube = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 1, 1),
+            new THREE.MeshNormalMaterial()
+        );
+        normalCube.position.z = -5;
+        this.scene.add(normalCube);
+    }
+
+    addIOSARButton() {
+        const arButton = document.createElement('a');
+        arButton.setAttribute('rel', 'ar');
+        arButton.setAttribute('href', 'models/chair_swan.usdz');
+        arButton.setAttribute('style', 'display: block; width: 200px; height: 50px; margin: 20px auto; background-color: #fff; border-radius: 10px; text-align: center; line-height: 50px; font-weight: bold; text-decoration: none; color: #000;');
+        arButton.textContent = 'View in AR (iOS)';
+        
+        document.body.appendChild(arButton);
+        
+        // Info message
+        const info = document.createElement('div');
+        info.textContent = 'iOS device detected. Tap button to launch AR Quick Look.';
+        info.setAttribute('style', 'text-align: center; margin-top: 20px; color: white; background-color: rgba(0,0,0,0.5); padding: 10px;');
+        document.body.appendChild(info);
+    }
+
+    addUnsupportedMessage() {
+        const message = document.createElement('div');
+        message.textContent = 'AR not supported on this device or browser.';
+        message.setAttribute('style', 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background-color: rgba(0,0,0,0.7); padding: 20px; border-radius: 10px; text-align: center;');
+        document.body.appendChild(message);
     }
 
     onSelect()
@@ -94,8 +138,8 @@ export default class WebXR
         // Render the scene
         this.renderer.render(this.scene, this.camera)
         
-        // Handle hit testing in XR sessions
-        if (this.renderer.xr.isPresenting) {
+        // Handle hit testing in XR sessions (only for WebXR)
+        if (!this.isIOS && this.renderer.xr.isPresenting) {
             const session = this.renderer.xr.getSession()
             const frame = this.renderer.xr.getFrame()
             
