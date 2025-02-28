@@ -100,7 +100,7 @@ export default class WebXR
     addIOSARButton() {
         const arButton = document.createElement('a');
         arButton.setAttribute('rel', 'ar');
-        arButton.setAttribute('href', 'models/chair_swan.usdz');
+        arButton.setAttribute('href', 'chair_swan.usdz');
         arButton.setAttribute('style', 'display: block; width: 200px; height: 50px; margin: 20px auto; background-color: #fff; border-radius: 10px; text-align: center; line-height: 50px; font-weight: bold; text-decoration: none; color: #000;');
         arButton.textContent = 'View in AR (iOS)';
         
