@@ -1,7 +1,7 @@
 export default class Welcome {
     constructor() {
         this.overlay = null;
-        this.init();
+        //this.init();
     }
 
     init() {

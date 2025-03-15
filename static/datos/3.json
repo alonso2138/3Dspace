@@ -6,25 +6,25 @@
     "url": "/models/casa.glb",
     "position": [0, 0, 0],
     "scale": [3, 3, 3],
-    "povs": [[0.0,4.4,21.2],[0.9, 10, 1.6],[7.3,7.3,7.1]],
+    "povs": [[0.0,4.4,21.2]],
     "lookAt": [[0,3.2,4],[0.9, 0, 1.6],[2.1,1.6,2.5]],
     "customs": [
         {
             "point": [-5,1,3],
             "name": "sofá",
             "img": "images/0/default.png",
-            "id": [1, 2],
-            "title": ["Sofá de terciopelo blanco", "Cuero"],
-            "description": ["Terciopelo blanco", "Cuero marrón"],
-            "url": ["models/sofa1.glb", "models/sofa2.glb"],
+            "id": [1],
+            "title": ["Sofá de terciopelo blanco"],
+            "description": ["Terciopelo blanco"],
+            "url": ["models/sofa1.glb"],
             "camera_position": [3.3,6.5,9.5],
             "camera_target": [-3.7,-1.7,-1.6],
-            "position": [[0, 0, 0], [0, 0, 0]],
-            "scale": [[3, 3, 3], [3, 3, 3]],
+            "position": [[0, 0, 0]],
+            "scale": [[3, 3, 3]],
             "selected": 0,
-            "image": ["images/3/1/1.jpg", "images/3/1/2.jpg"],
-            "price": [32.00, 53.00],
-            "price_id": ["1", "1"]
+            "image": ["images/3/1/1.jpg"],
+            "price": [32.00],
+            "price_id": ["1"]
         }
     ],
     "controls": 

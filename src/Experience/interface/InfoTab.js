@@ -10,7 +10,6 @@ export default class InfoTab {
 
         // Generate the HTML and inject styles
         this.generateHTML();
-        this.injectStyles();
     }
 
     appearBox(custom,id) {

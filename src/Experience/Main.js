@@ -1,19 +1,12 @@
 import Time from './Time.js';
 import SceneSetup from './SceneSetup.js';
 import ModelLoader from './ModelLoader.js';
-import ShadowCreator from './ShadowCreator.js';
-import BottomBar from './interface/BottomBar.js';
-import RightBar from './interface/RightBar.js';
-import InfoTab from './interface/InfoTab.js';
 import Resources from './Resources.js';
-import SelectObject from './interface/SelectObject.js';
 import LoadingBar from './interface/LoadingBar.js';
 import LoadColors from './interface/LoadColors.js';
-import Outline from './Model/Outline.js';
-import Stats from 'stats.js';
 import LoadMarcas from './Model/LoadMarcas.js';
 import Welcome from './interface/Welcome.js';
-import { UnpackDepthRGBAShader } from 'three/examples/jsm/Addons.js';
+import emailjs from '@emailjs/browser'
 
 let instance = null;
  
@@ -25,6 +18,181 @@ export default class Experience {
         }
         instance = this;
 
+                //Código para mail
+        // Preloader: se oculta al cargar la página
+      window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        preloader.classList.add('fade-out');
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 1000);
+      });
+  
+      // Menú mobile: toggle de navegación
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      menuToggle.addEventListener('click', function () {
+        navLinks.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+      });
+  
+      // Scroll suave para enlaces de ancla
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+  
+      // Animación de aparición en scroll (usando Intersection Observer)
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+  
+      document.querySelectorAll('.hero-content, .container').forEach(el => {
+        observer.observe(el);
+      });
+  
+    // Manejo del formulario de contacto
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Aquí iría la lógica de envío (fetch/ajax)
+      (function() {
+        emailjs.init("MgXUjPSRjA6ntcYny"); // Reemplaza con tu ID de usuario de EmailJS
+      })();
+  
+      // Obtener los datos del formulario
+      const nombre = this.querySelector('input[type="text"]').value;
+      const email = this.querySelector('input[type="email"]').value;
+      const mensaje = this.querySelector('textarea').value;
+      
+      // Feedback visual al usuario
+      const btn = this.querySelector('button');
+      const originalText = btn.textContent;
+      btn.textContent = "Enviando...";
+      btn.disabled = true;
+      
+      // Mostrar indicador de carga
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.className = 'loading-indicator';
+      loadingIndicator.innerHTML = `
+        <div class="spinner" style="border: 3px solid #f3f3f3; border-top: 3px solid #d4af37; 
+        border-radius: 50%; width: 30px; height: 30px; margin: 10px auto; 
+        animation: spin 1s linear infinite;"></div>
+        <p>Enviando mensaje...</p>
+      `;
+      this.appendChild(loadingIndicator);
+      
+      // Crear estilos para la animación
+      if (!document.getElementById('spinner-style')) {
+        const style = document.createElement('style');
+        style.id = 'spinner-style';
+        style.textContent = `
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      // Preparar datos para EmailJS
+      const templateParams = {
+        from_name: nombre,
+        from_email: email,
+        message: mensaje
+      };
+      
+      // Enviar email usando EmailJS
+      emailjs.send('service_vgqyf1o', 'template_48cdfgr', templateParams)
+        .then(function(response) {
+          console.log('SUCCESS!', response.status, response.text);
+          
+          // Mostrar mensaje de éxito
+          showSuccessMessage(e.target);
+        }, function(error) {
+          console.log('FAILED...', error);
+          
+          // Mostrar mensaje de error
+          showErrorMessage(e.target, btn, originalText);
+        });
+    });
+  
+    // Función para mostrar mensaje de éxito
+    function showSuccessMessage(form) {
+      form.innerHTML = `
+        <div style="text-align: center; padding: 20px; animation: fadeIn 0.5s ease;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          <h3>¡Mensaje enviado con éxito!</h3>
+          <p>Nos pondremos en contacto contigo pronto.</p>
+        </div>
+      `;
+      
+      // Añadir estilo para la animación de entrada
+      if (!document.getElementById('fadeIn-style')) {
+        const style = document.createElement('style');
+        style.id = 'fadeIn-style';
+        style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  
+    // Función para mostrar mensaje de error
+    function showErrorMessage(form, btn, originalText) {
+    // Eliminar indicador de carga
+    const loadingIndicator = form.querySelector('.loading-indicator');
+    if (loadingIndicator) form.removeChild(loadingIndicator);
+    
+    // Restaurar botón
+    btn.textContent = originalText;
+    btn.disabled = false;
+    
+    // Mostrar mensaje de error
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'error-message';
+    errorMsg.innerHTML = `
+      <p style="color: #e74c3c; margin: 10px 0; text-align: center; animation: shake 0.5s ease;">
+        Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo o contáctanos directamente.
+      </p>
+    `;
+    form.insertBefore(errorMsg, btn);
+    
+    // Añadir estilo para la animación shake
+    if (!document.getElementById('shake-style')) {
+      const style = document.createElement('style');
+      style.id = 'shake-style';
+      style.textContent = `
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    // Eliminar el mensaje después de 5 segundos
+    setTimeout(() => {
+      if (form.contains(errorMsg)) {
+        form.removeChild(errorMsg);
+      }
+    }, 5000);
+  }      
+
+        
         // Global access
         window.experience = this;
         window.addEventListener( 'resize', this.resizeEvent.bind(this),false);
@@ -47,34 +215,12 @@ export default class Experience {
         // Load colors
         this.loadColors = new LoadColors();
 
-        // Initialize this.selectObject
-        this.selectObject = new SelectObject();
-        this.selectObject.init();
-
         this.init();
     }
 
     async init(){
-        // Start the scene
-        try{
-            const quickCookie = this.getCookie('currentMoto');
-            this.selectObject.on('modelSelected', (path) => {
-                if(quickCookie){
-                    console.log("start normal")
-                    this.canvas.style.display = 'block';
-
-                        this.startFunction(path);
-                        this.quickCookie(path)
-                    
-                }else{
-                    this.canvas.style.display = 'block';
-
-                    this.startFunction(path);
-                }
-            });
-        }catch(e){
-            console.log(e);
-        }
+        this.startFunction('/datos/3.json');
+            
     }
 
     startFunction(path){
@@ -161,9 +307,6 @@ export default class Experience {
         this.piezaEditando = undefined;
 
         // Clear interface
-        if(this.bottomBar)  this.bottomBar.destroyBottomBar();
-        if(this.rightBar) this.rightBar.deleteRightBar();
-        if(this.infoTab) this.infoTab.deleteInfoTab();
         if(this.sceneSetup.mobilePov) this.sceneSetup.mobilePov.endMobilePov();
 
         // Clear existing state if necessary
@@ -177,118 +320,6 @@ export default class Experience {
         this.selectObject.init();
     }
 
-    // Callback function for parent square click
-    onParentSquareClick(id) {
-        //Check if there are already customs shown
-        /*if( this.piezaEditando==undefined){        
-            this.piezaEditando=id;
-            setTimeout(() => {
-                this.startEditing();
-                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
-
-            }, this.bottomBar.animationTimeout);
-        
-            //Check if we want to hide customs or to change customs
-        }else {*/
-            if( this.piezaEditando==id){
-
-                //this.stopEditing(true);
-                this.piezaEditando=undefined;
-
-            }else{
-                
-                //this.stopEditing(true);
-                this.piezaEditando=id;
-                this.startEditing();
-                if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[id]);
-
-                setTimeout(() => {
-                    this.startEditing();
-                }, this.bottomBar.animationTimeout);
-            }
-        //}
-    }
-
-    // Callback function for square click
-    onSquareClick(id) {
-        const piezaEditando = this.piezaEditando;
-        //Antes de esta función se ejecuta infoTabAppear(id)
-
-        //Estilos de seleccionar cuadrado
-        // Quitar estilos a todos los squares (id pieza seleccionada, i pieza iterada)
-        /*
-        function cuadrado(x){
-            return document.getElementById('CustomSquare'+(x+1)+'Pieza'+piezaEditando);
-        }
-        if(cuadrado(id) && piezaEditando!=undefined){
-            for(let i = 0; i < this.moto.customs[piezaEditando].id.length; i++){
-                if(cuadrado(i).classList.contains('CustomSquareSelected')) cuadrado(i).classList.remove('CustomSquareSelected');      
-            }
-
-            document.getElementById('CustomSquare'+(id+1)+'Pieza'+piezaEditando).classList.add('CustomSquareSelected');
-            
-            this.modelLoader.idAnterior[piezaEditando] = id;
-            //this.experience.moto.customs[piezaEditando].selected=id;
-            //console.log("El custom seleccionado es: "+this.experience.moto.customs[piezaEditando].selected,piezaEditando)
-        }
-
-        //Ahora se llama el model loader
-        */
-
-        if(document.querySelector('.selected')){
-            document.querySelector('.image.selected').classList.remove('selected');
-            document.querySelector('.label.selected').classList.remove('selected');
-        }
-        document.querySelector('.image'+id).classList.add('selected');
-        document.querySelector('.label'+id).classList.add('selected');
-
-        this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando,id)
-        if(this.outline) this.outline.setOutlineVisibility(true, this.modelLoader.customsModels[this.piezaEditando]);
-        if(this.rightBar) this.rightBar.updateList( this.piezaEditando, this.moto.customs[ this.piezaEditando].title[id], this.moto.customs[ this.piezaEditando].price[id]);
-
-        this.moto.customs[piezaEditando].selected=id;
-    }
-
-    infoTabAppear(id){
-        if(this.infoTab) this.infoTab.appearBox(this.moto.customs[this.piezaEditando],id);
-    }
-
-    stopEditing(cameraReset){
-        if(this.sceneSetup)this.sceneSetup.controls.enabled = true;
-
-        //if(this.piezaEditando==undefined) return;
-        this.piezaEditando=undefined;
-        if(document.querySelector('.point')){
-            document.querySelector('.point').style.opacity = '1';
-            document.querySelector('.point').style.pointerEvents = 'all';
-        }
-        
-        this.bottomBar.deleteBottomBar();
-        if(this.outline) this.outline.setOutlineVisibility(false, this.modelLoader.customsModels[this.piezaEditando]);
-        if(cameraReset) this.sceneSetup.resetCamera();
-        if(this.infoTab) this.infoTab.disappearBox();
-        this.modelLoader.loadModel(this.moto.customs[this.piezaEditando],  this.piezaEditando, this.moto.customs[this.piezaEditando].selected)
-        //if(document.getElementById('ParentSquare'+this.piezaEditando)) document.getElementById('ParentSquare'+this.piezaEditando).classList.remove('ParentSquareSelected');
-
-    }
-
-    startEditing(){
-        if(this.sceneSetup)this.sceneSetup.controls.enabled = false;
-        const id = this.piezaEditando;
-        if(document.querySelector('.point')){
-            document.querySelector('.point').style.opacity = '0';
-            document.querySelector('.point').style.pointerEvents = 'none';
-        }
-        this.sceneSetup.mobilePov.removeSelection();
-        this.bottomBar.generateBottomBar(this.moto.customs,id);
-        this.sceneSetup.moveCamera(this.moto.customs[id].camera_position, this.moto.customs[id].camera_target);
-        //if(document.getElementById('ParentSquare'+id)) document.getElementById('ParentSquare'+id).classList.add('ParentSquareSelected');
-    }
-
-    onSquareUnHover(){
-
-    }
-
     initScene() {
         // Initialize scene setup
         this.sceneSetup = new SceneSetup(this.canvas);
@@ -296,37 +327,7 @@ export default class Experience {
         this.modelLoader = new ModelLoader(this.scene);
         this.piezaEditando = undefined;
 
-        // Initialize interface
-        this.rightBar = new RightBar();
 
-        //Load cart
-
-        // Check for existing cookie
-        const cookieData = this.getCookie(this.path+'motoConfig');
-        if (cookieData) {
-            // COOKIE DETECTED
-            const savedConfig = JSON.parse(cookieData);
-            this.rightBar.selectedPieces = savedConfig.selectedPieces
-            for(let i = 0; i < savedConfig.selectedPieces.length; i++) {
-                //console.log(this.moto.customs[savedConfig.selectedPieces[i].piezaEditando].selected,savedConfig.selectedPieces[i])
-                if(this.moto.customs[savedConfig.selectedPieces[i].piezaEditando]) this.moto.customs[savedConfig.selectedPieces[i].piezaEditando].selected = savedConfig.selectedPieces[i].id
-            }
-
-            this.rightBar.updateList();
-            
-
-            //document.cookie = `motoConfig=; path=/; max-age=0`;
-        } else {
-            // NO COOKIE DETECTED
-
-            // Create a new cookie with the initial configuration
-            this.updateCookie();
-        }
-
-        this.infoTab = new InfoTab(this.onSquareClick.bind(this));
-
-        this.bottomBar = new BottomBar('square-container', this.onSquareClick.bind(this), this.onParentSquareClick.bind(this), this.infoTabAppear.bind(this), this.onSquareUnHover.bind(this));
-        this.bottomBar.init();
 
         //this.outline = new Outline(this.scene ,this.sceneSetup.camera,this.sceneSetup.renderer);
 
@@ -336,8 +337,6 @@ export default class Experience {
         for (let i = 0; i < this.moto.customs.length; i++) {
             //console.log("resources.items["+i+""+this.moto.customs[i].id[this.moto.customs[i].selected]+"].scene");
             //console.log(this.modelLoader.resources)
-
-            this.bottomBar.generateCustom(this.moto.customs[i], i);
             this.modelLoader.loadModel(this.moto.customs[i], i, this.moto.customs[i].selected);
         }
 
@@ -360,15 +359,12 @@ export default class Experience {
 
     resizeEvent(){
         if (this.sceneSetup) this.sceneSetup.resize();
-        if (this.bottomBar) this.bottomBar.resize();
-        if (this.rightBar) this.rightBar.resize();
     }
 
     update()
     {
         //this.stats.begin()
         this.sceneSetup.render();
-        this.bottomBar.update();
 
         if(this.piezaEditando!=undefined){
             if(this.outline) this.outline.composer.render();

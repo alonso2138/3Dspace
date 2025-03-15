@@ -13,6 +13,7 @@
     "vite-plugin-restart": "^0.4.1"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@stripe/stripe-js": "^1.15.0",
     "cors": "^2.8.5",
     "express": "^4.21.1",

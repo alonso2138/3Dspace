@@ -1,5 +1,0 @@
-// Guardar y mandar a la web
-git add . && git commit -m "Add root route" && git push origin master && git push heroku master
-
-// Ver servidor
-heroku logs --tail

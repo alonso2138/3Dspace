@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/x-icon" href="../favicon.png">
+    <link rel="icon" type="image/x-icon" href="./logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YER | Virtual Tour</title>
-    <meta name="description" content="Bienvenido a Yer Real Estate, explore nuestra visita virtual en 3D.">
+    <title>3DSpaces</title>
+    <meta name="description" content="Experiencias de alta calidad personalizadas para entorno web.">
 
-    <meta property="og:title" content="Yer Real Estate | 3D Virtual Tour">
-    <meta property="og:description" content="Bienvenido a Yer Real Estate, explore nuestra visita virtual en 3D.">
+    <meta property="og:title" content="3DSpaces - Inicio">
+    <meta property="og:description" content="Experiencias de alta calidad personalizadas para entorno web.">
     <meta property="og:image" content="./Portrait.png">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Yer Real Estate">
+    <meta property="og:site_name" content="3DSpaces">
     <meta property="og:locale" content="es_ES">
 
     <link rel="stylesheet" href="./style.css">
@@ -19,12 +19,119 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+  
 </head>
 <body">
     <script type="module" src="./script.js"></script>
 
-    <canvas class="webgl"></canvas>
+      <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader">
+      <!-- Puedes reemplazar "logo.png" por el logotipo de tu marca -->
+      <img src="./logo.png" alt="Logo" />
+    </div>
+  </div>
+
+  <!-- Header y navegación -->
+  <header>
+    <nav>
+      <div class="logo">3DSpaces</div>
+      <ul class="nav-links">
+        <li><a href="#hero">Inicio</a></li>
+        <li><a href="#about">Sobre Nosotros</a></li>
+        <li><a href="#gallery">Galería</a></li>
+        <li><a href="#contact">Contacto</a></li>
+      </ul>
+      <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+        <h1>Experiencias 3D web interactivas </h1>
+        <p>Comparte tu visión</p>
+        <a href="#contact" class="btn">Empieza tu prueba gratuita</a>
+        </div>
+
+        <!-- Contenedor para la escena 3D -->
+        <canvas id="three-container" class="webgl"></canvas>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="about">
+    <div class="container">
+        <h2>Sobre Nosotros</h2>
+        <p>
+        Somos un equipo apasionado por la innovación y la excelencia en visualización 3D, comprometidos a ofrecer experiencias digitales de alta gama para todos.
+        </p>
+    </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="gallery">
+    <div class="container">
+        <h2>Un poco de nuestro trabajo</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <video autoplay muted loop playsinline>
+                    <source src="./videos/video1.mp4" type="video/mp4">
+                    Tu navegador no soporta videos HTML5.
+                </video>
+                <div class="gallery-item-description">
+                    <h3>Visualización de materiales realista</h3>
+                    <p>Usando iluminación dinámica y movimientos interactivos podemos ofrecer una experiencia fiel a la realidad.</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <video autoplay muted loop playsinline>
+                    <source src="./videos/video2.mp4" type="video/mp4">
+                    Tu navegador no soporta videos HTML5.
+                </video>
+                <div class="gallery-item-description">
+                    <h3>Experiencias de personalización</h3>
+                    <p>Personalice un espacio 3D con opción de presupuestado en tiempo real </p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <video autoplay muted loop playsinline>
+                    <source src="./videos/video3.mp4" type="video/mp4">
+                    Tu navegador no soporta videos HTML5.
+                </video>
+                <div class="gallery-item-description">
+                    <h3>Automatizaciones de CAD a experiencias 3D</h3>
+                    <p>Sin cargar su flujo de trabajo transforme modelos 3D a experiencias en línea.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contact">
+    <div class="container">
+        <h2>Contacto</h2>
+        <form id="contact-form">
+        <input type="text" placeholder="Nombre" required />
+        <input type="email" placeholder="Email" required />
+        <textarea placeholder="Mensaje" rows="5" required></textarea>
+        <button type="submit" class="btn">Enviar Mensaje</button>
+        </form>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <p>&copy; 2025 3DSpaces. Todos los derechos reservados.</p>
+    </div>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </body>

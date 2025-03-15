@@ -27,6 +27,22 @@ export default class SceneSetup {
         this.setupCamera();
         this.setupRenderer();
         this.addLights();
+        this.addMouseMove();
+    }
+
+    addMouseMove(){
+        window.addEventListener('mousemove', (e) => {
+            // Convert mouse coordinates to normalized coordinates (-1 to 1)
+            const normalizedX = (e.clientX / window.innerWidth) * 2 - 1;
+            const normalizedY = -(e.clientY / window.innerHeight) * 2 + 1;
+            
+            // Calculate camera position based on original position with subtle offset
+            const offsetX = this.cameraOriginal[0] + (normalizedX * 0.7); // Scale factor of 0.5
+            const offsetY = this.cameraOriginal[1] + (normalizedY * 0.5); // Scale factor of 0.3
+            
+            // Move camera to new position
+            this.moveCamera([offsetX, offsetY, this.camera.position.z]);
+        });
     }
 
     setupCamera() {
@@ -34,6 +50,7 @@ export default class SceneSetup {
         this.camera.position.set(this.cameraOriginal[0], this.cameraOriginal[1], this.cameraOriginal[2]); // Posición de la cámara para ver el objeto
 
         // this.Controls for rotating the scene
+        
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enablePan = true; // Disable panning
         this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
@@ -47,6 +64,7 @@ export default class SceneSetup {
             document.body.style.cursor='auto'
         });
         //this.controls.maxDistance = 20;
+        
     }
 
     setupRenderer() {     
@@ -54,8 +72,14 @@ export default class SceneSetup {
             canvas: this.canvas,
             antialias: true
         })
-
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // Set the size with preserveDrawingBuffer
+        this.renderer.setSize(window.innerWidth, window.innerHeight, false);
+        
+        // Set canvas style to 100% width and height
+        this.canvas.style.width = '100%';
+        this.canvas.style.height = '100%';
+        this.canvas.style.display = 'block';
+        
         this.renderer.setClearColor(0xffffff); // Fondo blanco
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -148,20 +172,27 @@ export default class SceneSetup {
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-        
+        // Ensure canvas style remains at 100%
+        this.canvas.style.width = '100%';
+        this.canvas.style.height = '100%';
+    
         if(window.innerWidth<768){
             if(!this.experience.moto.controls.mobile) return;
             this.setOrbitControlsProperties("mobile");
-            this.targetOriginal = this.experience.moto.controls.mobile.objetivo;
-            this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
+            if(this.controls) {      
+                this.targetOriginal = this.experience.moto.controls.mobile.objetivo;
+                this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
+            }
             
             //this.mobilePov.startMobilePov();
         }else {
             if(!this.experience.moto.controls.computer) return;
             this.setOrbitControlsProperties("computer");
-            this.targetOriginal = this.experience.moto.lookAt[0];
-            this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
-            
+            if(this.controls) {
+                this.targetOriginal = this.experience.moto.lookAt[0];
+                this.controls.target.set(this.targetOriginal[0], this.targetOriginal[1], this.targetOriginal[2]);
+            }
+
             //this.mobilePov.startMobilePov();
         }
     }
@@ -217,6 +248,7 @@ export default class SceneSetup {
                   circle = { x: 0, y: 0 };
             
             window.addEventListener('mousemove', e => {
+                console.log("ddd")
               circle.x += (e.x - circle.x) * speed;
               circle.y += (e.y - circle.y) * speed;
               circleElement.style.transform = `translate(${circle.x}px, ${circle.y}px)`;
