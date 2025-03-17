@@ -67,6 +67,17 @@ export default class SceneSetup {
         
     }
 
+    // Add this new method
+    updateCameraFOV() {
+        // Set FOV based on device width
+        if (window.innerWidth < 768) {
+            this.camera.fov = 70; // Mobile FOV
+        } else {
+            this.camera.fov = 45; // Desktop FOV
+        }
+        this.camera.updateProjectionMatrix();
+    }
+
     setupRenderer() {     
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
@@ -166,6 +177,9 @@ export default class SceneSetup {
     }
 
     resize() {
+        // Call the FOV update when resizing
+        this.updateCameraFOV();
+
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 

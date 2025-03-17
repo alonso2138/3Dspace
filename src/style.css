@@ -43,10 +43,17 @@
     opacity: 0;
     visibility: hidden;
   }
-  #preloader .loader img {
-    width: 100%;
-    animation: pulse 1.5s infinite;
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+  
+  .loader img {
+    max-width: 100px; /* Adjust based on your desired logo size */
+    height: auto;
+  }
+
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -309,16 +316,18 @@
   /* Media queries para móvil */
   @media (max-width: 768px) {
     .nav-links {
-      position: fixed;
       top: 60px;
+      position: fixed;
       left: -100%;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 0, 0.50);
       width: 100%;
       height: calc(100% - 60px);
       flex-direction: column;
       justify-content: center;
       align-items: center;
       transition: left 0.3s ease;
+      z-index:10;
+      height: auto;
     }
     .nav-links.active {
       left: 0;
@@ -330,4 +339,8 @@
       display: flex;
     }
 
+    .gallery-grid{
+      max-width: 90%;
+      gap: 100px;
+    }
   }
