@@ -20,8 +20,8 @@
 
   body {
     font-family: var(--font-primary);
-    background: var(--color-secundario);
-    color: var(--color-primario);
+    background-color: #fff;
+
     line-height: 1.6;
   }
 
@@ -92,6 +92,7 @@
     margin-left: 30px;
   }
   .nav-links a {
+    padding: 15px 0;
     text-decoration: none;
     color: var(--color-secundario);
     font-weight: 500;
@@ -126,9 +127,8 @@
 
   /* Sección Hero */
   #hero {
-
-    height: 100vh;
-    background: url('https://via.placeholder.com/1920x1080?text=Fondo+Premium') no-repeat center center/cover;
+    padding: 200px 20px !important;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -200,6 +200,8 @@
   /* Secciones generales */
   section {
     padding: 100px 20px;
+
+    height:100%;
     text-align: center;
     background-color: #fff;
   }
@@ -313,6 +315,10 @@
     text-align: center;
   }
 
+  #about{
+    padding-top:30vh;
+  }
+
   /* Media queries para móvil */
   @media (max-width: 768px) {
     .nav-links {
@@ -342,5 +348,13 @@
     .gallery-grid{
       max-width: 90%;
       gap: 100px;
+    }
+
+    .section{
+      padding: 100px 20px;
+    }
+
+    #about{
+      padding-top:0vh;
     }
   }
