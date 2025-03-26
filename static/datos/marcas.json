@@ -3,10 +3,10 @@
     [
         {
             "name": "",
-            "photo_url": "/images/logos/yer.png",
+            "photo_url": "/images/logos/cubicup.png",
             "models": [
                 {
-                    "name": "Villa Klara",
+                    "name": "Escena salón tipo",
                     "photo_url": "/images/1.jpeg",
                     "data_url": "/datos/3.json"
                 }

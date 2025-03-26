@@ -48,7 +48,7 @@ export default class Welcome {
 
         // Create welcome texts
         const texts = [
-            "¡Bienvenido a Your Essential Reality!",
+            "¡Bienvenido al visualizador de Cubicup!",
             "Toca la pantalla para mirar alrededor 👆",
             "Pulsa los botones para personalizar los muebles 🖲️",
             "Pulsa para continuar"
